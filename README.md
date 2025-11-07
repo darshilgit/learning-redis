@@ -1,0 +1,584 @@
+# 🚀 Redis Learning with Go
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Go Version](https://img.shields.io/badge/Go-1.23.5-blue.svg)](https://golang.org/dl/)
+
+A hands-on learning project to master Redis using Go and Docker.
+
+---
+
+## 🎯 **START HERE - New to This Course?**
+
+### **Step 1: Prerequisites (5 min)**
+Make sure you have:
+- ✅ Docker Desktop installed and running
+- ✅ Go 1.16+ installed
+- ✅ Basic understanding of Go programming
+
+### **Step 2: Quick Start (5 min)**
+```bash
+# 1. Navigate to the Redis course
+cd learning-redis
+
+# 2. Start Redis
+docker compose up -d
+
+# 3. Run basic examples (Terminal 1)
+go run examples/basic/strings/main.go
+
+# 4. Open Redis Commander UI
+open http://localhost:8081
+```
+
+**See data in Redis?** ✅ You're ready to learn!
+
+### **Step 3: Follow the Structured Learning Path**
+
+👉 **Go to [GETTING_STARTED.md](GETTING_STARTED.md)** for your complete learning roadmap!
+
+**What you'll find there:**
+- 🗺️ **Complete Visual Roadmap** - Your single source of truth with all steps mapped out
+- 📅 Day-by-day learning plan (Week 1-4) with time estimates
+- 🧪 Hands-on experiments for each concept
+- 🎯 Clear milestones and self-check goals
+- 🛠️ Tool usage guides
+- 📊 Progress tracking with checkboxes
+- ⏱️ 35-45 hours total (flexible pacing: 2-8 weeks)
+
+**Don't read this entire README first!** Use it as a reference. Start with GETTING_STARTED.md for the best learning experience.
+
+---
+
+## 📚 What is Redis?
+
+Redis (REmote DIctionary Server) is an open-source, in-memory data structure store that can be used as:
+- **Database** - Fast key-value storage with persistence
+- **Cache** - Lightning-fast data caching layer
+- **Message Broker** - Pub/Sub and Streams for real-time messaging
+- **Session Store** - Distributed session management
+
+### Key Concepts (For Beginners)
+
+#### 🔑 Key-Value Store
+Think of Redis as a **giant hash map in memory**.
+- Key: A string identifier (e.g., `user:1000:name`)
+- Value: Can be strings, lists, sets, hashes, and more
+- Example: `SET user:1000:name "Alice"` → `GET user:1000:name` returns `"Alice"`
+- Why it's fast: Everything is in RAM!
+
+#### 📊 Data Structures
+Redis isn't just strings - it has rich data structures:
+
+**Strings** - The simplest type
+```
+SET counter 0
+INCR counter  → returns 1
+GET counter   → returns "1"
+```
+
+**Lists** - Ordered sequences (like arrays)
+```
+LPUSH queue "task1" "task2" "task3"
+RPOP queue  → returns "task1"
+```
+
+**Sets** - Unique unordered collections
+```
+SADD tags "redis" "database" "cache"
+SISMEMBER tags "redis"  → returns 1 (true)
+```
+
+**Hashes** - Like objects/structs
+```
+HSET user:1000 name "Alice" age "30" city "NYC"
+HGET user:1000 name  → returns "Alice"
+```
+
+**Sorted Sets** - Sets with scores (leaderboards!)
+```
+ZADD leaderboard 100 "player1" 95 "player2"
+ZREVRANGE leaderboard 0 -1  → ["player1", "player2"]
+```
+
+**Streams** - Append-only logs (like Kafka!)
+```
+XADD events * action "login" user "alice"
+XREAD STREAMS events 0
+```
+
+#### ⚡ Why Redis is Fast
+- **In-Memory** - No disk I/O for reads
+- **Single-Threaded** - No lock contention
+- **Simple Protocol** - Low parsing overhead
+- **Optimized Data Structures** - Custom implementations
+
+#### 💾 Persistence Options
+**RDB (Snapshots)**
+- Point-in-time snapshots
+- Compact, fast to load
+- May lose data between snapshots
+
+**AOF (Append-Only File)**
+- Logs every write operation
+- More durable
+- Larger file size
+
+**Hybrid** - RDB + AOF (Redis 4.0+)
+
+#### 🔄 Replication & High Availability
+
+**Master-Replica**
+- One master (writes)
+- Multiple replicas (reads)
+- Async replication
+
+**Redis Sentinel**
+- Monitors Redis instances
+- Automatic failover
+- Health checking
+
+**Redis Cluster**
+- Sharding across nodes
+- 16,384 hash slots
+- Horizontal scaling
+
+#### 📡 Pub/Sub vs Streams
+
+**Pub/Sub** - Fire and forget
+```
+PUBLISH channel "message"
+SUBSCRIBE channel
+```
+- No persistence
+- Fire-and-forget
+- Multiple subscribers
+
+**Streams** - Durable messaging
+```
+XADD stream * field value
+XREADGROUP GROUP mygroup consumer1 STREAMS stream >
+```
+- Persistent
+- Consumer groups (like Kafka!)
+- Acknowledgements
+
+---
+
+## 🛠️ Prerequisites
+
+- Docker Desktop installed and running
+- Go 1.16+ installed
+- Basic understanding of Go programming
+
+## 🏃 Quick Start
+
+### Option A: Using Make (Easiest)
+
+```bash
+# Start Redis
+make up
+
+# Run examples
+make strings
+make lists
+make hashes
+
+# Monitor Redis
+make monitor
+
+# View all commands
+make help
+```
+
+### Option B: Using Docker Compose Directly
+
+```bash
+# Start Redis and Redis Commander UI
+docker compose up -d
+
+# Check if containers are running
+docker compose ps
+
+# View Redis logs
+docker compose logs -f redis
+```
+
+**What's Running:**
+- Redis server at `localhost:6379`
+- Redis Commander UI at `http://localhost:8081` for visual inspection
+
+### 2. Run Your First Commands
+
+```bash
+# Interactive Redis CLI
+docker exec -it redis redis-cli
+
+# Or use our Go examples
+go run examples/basic/strings/main.go
+```
+
+**What the examples do:**
+- Connect to Redis
+- Perform basic operations (SET, GET, etc.)
+- Show you how to use redis-go library
+
+### 3. Explore Redis Commander UI
+
+Visit `http://localhost:8081` in your browser to:
+- **Browse keys** - See all data in Redis visually
+- **Inspect values** - View content of any key
+- **Run commands** - Execute Redis commands in UI
+- **Monitor** - Watch operations in real-time
+
+---
+
+## 📖 Learning Path
+
+> 💡 **Pro Tip**: As you learn, check out [`docs/PRODUCTION_PATTERNS.md`](docs/PRODUCTION_PATTERNS.md) to see how these concepts are implemented in real production systems!
+
+### 🎯 Learning Tools Available
+
+1. **[LEARNING_LOG.md](LEARNING_LOG.md)** - Your personal journal
+   - Document experiments and insights
+   - Track progress
+   - Log questions and learnings
+
+2. **[Makefile](Makefile)** - Quick commands
+   - `make up` / `make down` - Start/stop Redis
+   - `make strings` / `make lists` - Run examples
+   - `make monitor` - Watch Redis commands
+   - `make help` - See all commands
+
+3. **[experiments/](experiments/)** - Hands-on experiments
+   - Break things intentionally
+   - Test hypotheses
+   - Learn by doing
+   - Example experiments included
+
+4. **[PRODUCTION_COMPARISON.md](PRODUCTION_COMPARISON.md)** - Learning tracker
+   - Compare with production setup
+   - Track what you understand
+   - Plan deep-dive topics
+
+5. **[mini-redis/](mini-redis/)** - 🆕 Understand Redis Internals
+   - Simple in-memory Redis implementation
+   - See HOW data structures work internally
+   - ~300 lines of readable Go code
+   - Perfect for understanding concepts
+   - Run: `make mini-redis` or `cd mini-redis && go run .`
+
+### Week 1: Basics ✅
+- [ ] Set up Redis with Docker
+- [ ] Understand core data structures (Strings, Lists, Sets, Hashes, Sorted Sets)
+- [ ] Learn TTL and expiration
+- [ ] Experiment with different data structures
+- [ ] Compare performance characteristics
+
+### Week 2: Intermediate
+- [ ] Pub/Sub messaging
+- [ ] Redis Streams (like Kafka!)
+- [ ] Consumer groups in Streams
+- [ ] Lua scripting for atomic operations
+- [ ] Transactions and pipelining
+
+### Week 3: Advanced
+- [ ] Redis replication (Master-Replica)
+- [ ] Redis Sentinel (automatic failover)
+- [ ] Redis Cluster (sharding)
+- [ ] Persistence strategies (RDB vs AOF)
+- [ ] Performance tuning
+
+### Week 4: Production
+- [ ] Caching patterns (cache-aside, write-through, write-behind)
+- [ ] Cache invalidation strategies
+- [ ] Connection pooling
+- [ ] Monitoring and debugging
+- [ ] Security (AUTH, ACLs, TLS)
+- [ ] Redis + Kafka integration (if you took the Kafka course!)
+
+---
+
+## 🧠 Understanding Redis Internals (NEW!)
+
+Before diving into exercises, understand HOW Redis works internally:
+
+### Mini-Redis Simulator
+```bash
+cd mini-redis
+go run .
+```
+
+**What it shows:**
+- How Redis stores data structures (Go maps and slices!)
+- Why Redis is single-threaded (no locks needed)
+- How TTL/expiration works
+- How commands are processed
+- Why it's so fast
+
+**Time:** 15 minutes
+**Value:** Deep understanding of Redis's core logic
+
+Then read the code:
+1. `data.go` - Data structure storage
+2. `commands.go` - How commands work
+3. `expiration.go` - TTL mechanism
+4. `server.go` - Request processing
+
+**See: [mini-redis/README.md](mini-redis/README.md) for full guide**
+
+---
+
+## 🔬 Hands-on Exercises
+
+### Exercise 1: Data Structure Exploration ✅ (Start Here!)
+1. **Start Redis**: `docker compose up -d`
+2. **Open Redis Commander**: http://localhost:8081
+3. **Run examples**:
+   ```bash
+   go run examples/basic/strings/main.go
+   go run examples/basic/lists/main.go
+   go run examples/basic/hashes/main.go
+   ```
+4. **Observe**:
+   - See keys appear in Redis Commander
+   - Check TTL countdown
+   - Explore data structure contents
+
+### Exercise 2: Build a Cache
+1. Implement cache-aside pattern
+2. Set appropriate TTLs
+3. Handle cache misses
+4. Measure hit rate
+
+### Exercise 3: Real-Time Leaderboard
+1. Use Sorted Sets
+2. Add/update scores
+3. Get top 10 players
+4. Handle ties
+
+### Exercise 4: Pub/Sub Chat
+1. Create publisher
+2. Create subscribers
+3. Send messages
+4. Handle multiple channels
+
+### Exercise 5: Redis Streams
+1. Create stream
+2. Add messages
+3. Read with consumer groups
+4. Acknowledge messages
+5. Compare with Kafka Streams
+
+### Exercise 6: High Availability
+1. Set up Master-Replica
+2. Configure Sentinel
+3. Simulate master failure
+4. Watch automatic failover
+
+---
+
+## 🎯 Advanced Topics to Explore
+
+### Caching Strategies
+- **Cache-Aside** (Lazy Loading)
+- **Write-Through** (Write to cache + DB)
+- **Write-Behind** (Write to cache, async to DB)
+- **Refresh-Ahead** (Predictive cache refresh)
+
+### Data Structure Use Cases
+- **Strings**: Simple KV, counters, flags
+- **Lists**: Queues, stacks, activity feeds
+- **Sets**: Tags, unique visitors, relationships
+- **Hashes**: Objects, user profiles, settings
+- **Sorted Sets**: Leaderboards, time series, ranges
+- **Streams**: Event logs, activity streams, messaging
+
+### Performance Patterns
+- Pipelining (batch commands)
+- Transactions (MULTI/EXEC)
+- Lua scripting (atomic operations)
+- Connection pooling
+- Read replicas for scaling reads
+
+---
+
+## 🔧 Useful Commands
+
+### Docker Commands
+
+```bash
+# Stop Redis
+docker compose down
+
+# Stop and remove data (fresh start)
+docker compose down -v
+
+# Restart Redis
+docker compose restart
+
+# View logs
+docker compose logs -f redis
+```
+
+### Redis CLI Commands (via Docker)
+
+```bash
+# Connect to Redis CLI
+docker exec -it redis redis-cli
+
+# Inside redis-cli:
+PING                    # Test connection
+INFO                    # Server info
+DBSIZE                  # Number of keys
+KEYS *                  # List all keys (don't use in production!)
+FLUSHALL                # Delete all keys (careful!)
+MONITOR                 # Watch all commands in real-time
+
+# Set and get values
+SET mykey "Hello"
+GET mykey
+DEL mykey
+
+# Check key type
+TYPE mykey
+
+# Set expiration (TTL)
+EXPIRE mykey 10
+TTL mykey
+```
+
+**Note:** We use `localhost:6379` from your host machine (Go code) and `redis:6379` inside Docker containers.
+
+---
+
+## 📝 Project Structure
+
+```
+learning-redis/
+├── docker-compose.yml          # Redis + Redis Commander setup
+├── Makefile                    # Quick commands (make help)
+├── GETTING_STARTED.md          # Week-by-week learning guide
+├── LEARNING_LOG.md             # Your learning journal
+├── PRODUCTION_COMPARISON.md    # Track production vs learning
+│
+├── examples/
+│   └── basic/                  # Basic examples
+│       ├── strings/main.go     # String operations
+│       ├── lists/main.go       # List operations
+│       ├── sets/main.go        # Set operations
+│       ├── hashes/main.go      # Hash operations
+│       └── streams/main.go     # Redis Streams
+│   ├── caching/                # Caching patterns
+│   └── pubsub/                 # Pub/Sub examples
+│
+├── experiments/                # Hands-on experiments
+│   ├── README.md              # Experiment guide
+│   └── data-structures.md     # Example experiment
+│
+├── mini-redis/                 # Redis internals simulator
+│   ├── README.md              # How to use
+│   ├── *.go                   # Simple implementation
+│   └── go.mod                 # Standalone module
+│
+├── docs/
+│   ├── REDIS_DEEP_DIVE.md     # Detailed concepts
+│   └── PRODUCTION_PATTERNS.md # Real production patterns
+│
+├── go.mod & go.sum            # Go dependencies
+└── README.md                  # This file
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Redis won't start
+- **Check Docker Desktop** is running
+- **Port conflicts**: Ensure port 6379 is not in use
+  ```bash
+  lsof -i :6379
+  ```
+- **Fresh start**: Remove all data and restart
+  ```bash
+  docker compose down -v && docker compose up -d
+  ```
+
+### Redis Commander shows nothing
+- **Wait a moment**: Takes 5 seconds to connect after startup
+- **Check Redis is healthy**:
+  ```bash
+  docker compose ps
+  docker exec redis redis-cli PING
+  ```
+- **Refresh browser**: Sometimes needs manual refresh
+
+### Go examples connection errors
+- **Ensure Redis is running**: `docker compose ps`
+- **Check Redis logs**: `docker compose logs redis`
+- **Verify connection**: `docker exec redis redis-cli PING`
+
+### Keys not appearing
+- **Check database number**: Redis has 16 databases (0-15), examples use DB 0
+- **Run example first**: Keys only appear after running code
+- **Verify in Redis Commander**: http://localhost:8081
+
+---
+
+## 📚 Documentation & Resources
+
+### 📖 Project Documentation
+
+1. **[README.md](README.md)** (this file) - Getting started guide
+2. **[docs/REDIS_DEEP_DIVE.md](docs/REDIS_DEEP_DIVE.md)** - Deep technical dive
+3. **[docs/PRODUCTION_PATTERNS.md](docs/PRODUCTION_PATTERNS.md)** - Real production patterns
+
+### 🌐 External Resources
+
+- [Redis Documentation](https://redis.io/documentation)
+- [go-redis Library](https://github.com/redis/go-redis)
+- [Redis University](https://university.redis.com/)
+- [Redis Commands Reference](https://redis.io/commands)
+
+---
+
+## 🎓 Next Steps
+
+1. Complete all exercises above
+2. Build a real-world application (e.g., caching layer, real-time leaderboard)
+3. Learn about Redis Cluster for horizontal scaling
+4. Explore Redis Streams for event-driven architectures
+5. Study Redis's architecture and internals
+6. Practice with production-like scenarios
+
+---
+
+## 💡 Connection to Kafka Course
+
+If you completed the [Kafka course](../README.md), you'll see many parallels:
+
+| Concept | Kafka | Redis |
+|---------|-------|-------|
+| **Messaging** | Topics | Pub/Sub or Streams |
+| **Consumer Groups** | Native | Streams only |
+| **Persistence** | Disk-based logs | RDB/AOF snapshots |
+| **Partitioning** | Topic partitions | Cluster hash slots |
+| **Use Case** | Event streaming | State storage, caching |
+
+**Week 4 Integration**: Learn how Redis and Kafka work together in production!
+
+---
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](../LICENSE) file for details.
+
+## 🤝 Contributing
+
+This is a learning project, but improvements are welcome! Feel free to:
+- Report issues
+- Suggest improvements
+- Share your learning experiences
+- Contribute examples or experiments
+
+Happy Learning! 🎉
+
