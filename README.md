@@ -9,13 +9,67 @@ A hands-on learning project to master Redis using Go and Docker.
 
 ## 🎯 **START HERE - New to This Course?**
 
-### **Step 1: Prerequisites (5 min)**
-Make sure you have:
+### 👥 **Choose Your Learning Path**
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### 🌱 **Beginner Path** 
+**Just Learning Redis**
+
+✅ Focus on Weeks 1-3 only  
+✅ 20-25 hours of learning  
+✅ No interview pressure  
+✅ Build real applications  
+
+**Goal:** Understand and use Redis confidently in your projects
+
+**Perfect for:**
+- Learning Redis for the first time
+- Building side projects
+- Understanding in-memory databases
+- No immediate job search
+
+👉 **[Start Week 1](GETTING_STARTED.md#week-1-redis-fundamentals-8-10-hours)**
+
+</td>
+<td width="50%" valign="top">
+
+#### 💼 **Interview Path**
+**Preparing for Jobs**
+
+✅ Complete all 4 weeks  
+✅ 35-45 hours total  
+✅ Interview preparation included  
+✅ System design scenarios  
+
+**Goal:** Master Redis + ace FAANG interviews
+
+**Perfect for:**
+- Preparing for job interviews
+- FAANG/senior engineer roles
+- System design practice
+- Career advancement
+
+👉 **[Start Week 1](GETTING_STARTED.md#week-1-redis-fundamentals-8-10-hours)** (same start!)
+
+</td>
+</tr>
+</table>
+
+**🆕 New to Redis?** → Choose **Beginner Path** and focus only on Week 1 to start!
+
+---
+
+### **Quick Start (5 minutes)**
+
+**Prerequisites:**
 - ✅ Docker Desktop installed and running
 - ✅ Go 1.16+ installed
 - ✅ Basic understanding of Go programming
 
-### **Step 2: Quick Start (5 min)**
+**Get Redis Running:**
 ```bash
 # 1. Navigate to the Redis course
 cd learning-redis
@@ -23,7 +77,7 @@ cd learning-redis
 # 2. Start Redis
 docker compose up -d
 
-# 3. Run basic examples (Terminal 1)
+# 3. Run basic examples
 go run examples/basic/strings/main.go
 
 # 4. Open Redis Commander UI
@@ -32,7 +86,7 @@ open http://localhost:8081
 
 **See data in Redis?** ✅ You're ready to learn!
 
-### **Step 3: Follow the Structured Learning Path**
+### **Next Steps**
 
 👉 **Go to [GETTING_STARTED.md](GETTING_STARTED.md)** for your complete learning roadmap!
 
@@ -100,7 +154,7 @@ ZADD leaderboard 100 "player1" 95 "player2"
 ZREVRANGE leaderboard 0 -1  → ["player1", "player2"]
 ```
 
-**Streams** - Append-only logs (like Kafka!)
+**Streams** - Append-only logs for messaging
 ```
 XADD events * action "login" user "alice"
 XREAD STREAMS events 0
@@ -159,8 +213,8 @@ XADD stream * field value
 XREADGROUP GROUP mygroup consumer1 STREAMS stream >
 ```
 - Persistent
-- Consumer groups (like Kafka!)
-- Acknowledgements
+- Consumer groups for parallel processing
+- Acknowledgements and failure handling
 
 ---
 
@@ -276,7 +330,7 @@ Visit `http://localhost:8081` in your browser to:
 
 ### Week 2: Intermediate
 - [ ] Pub/Sub messaging
-- [ ] Redis Streams (like Kafka!)
+- [ ] Redis Streams and consumer groups
 - [ ] Consumer groups in Streams
 - [ ] Lua scripting for atomic operations
 - [ ] Transactions and pipelining
@@ -288,13 +342,16 @@ Visit `http://localhost:8081` in your browser to:
 - [ ] Persistence strategies (RDB vs AOF)
 - [ ] Performance tuning
 
-### Week 4: Production
-- [ ] Caching patterns (cache-aside, write-through, write-behind)
-- [ ] Cache invalidation strategies
-- [ ] Connection pooling
-- [ ] Monitoring and debugging
-- [ ] Security (AUTH, ACLs, TLS)
-- [ ] Redis + Kafka integration (if you took the Kafka course!)
+### Week 4: Production & Interviews (OPTIONAL - Choose Your Focus)
+
+**🌱 Beginner Path:** Stop here! You've learned Redis. Week 4 is optional.
+
+**💼 Interview Path:** Continue to Week 4 for interview preparation.
+
+**Week 4 Options:**
+- [ ] **Production Focus:** Caching patterns, connection pooling, monitoring, security
+- [ ] **Interview Focus:** System design scenarios, hot key problem, trade-off discussions
+- [ ] **Both:** Complete production patterns + interview preparation
 
 ---
 
@@ -367,7 +424,7 @@ Then read the code:
 2. Add messages
 3. Read with consumer groups
 4. Acknowledge messages
-5. Compare with Kafka Streams
+5. Practice system design interview scenarios
 
 ### Exercise 6: High Availability
 1. Set up Master-Replica
@@ -552,19 +609,30 @@ learning-redis/
 
 ---
 
-## 💡 Connection to Kafka Course
+## 💼 Interview Preparation (Optional - Interview Path Only)
 
-If you completed the [Kafka course](../README.md), you'll see many parallels:
+**💡 Following the 🌱 Beginner Path?** You can skip this section! It's only needed if you're preparing for job interviews.
 
-| Concept | Kafka | Redis |
-|---------|-------|-------|
-| **Messaging** | Topics | Pub/Sub or Streams |
-| **Consumer Groups** | Native | Streams only |
-| **Persistence** | Disk-based logs | RDB/AOF snapshots |
-| **Partitioning** | Topic partitions | Cluster hash slots |
-| **Use Case** | Event streaming | State storage, caching |
+**💼 Following the Interview Path?** This is your Week 4 content:
 
-**Week 4 Integration**: Learn how Redis and Kafka work together in production!
+### What's Included
+
+- **Interview Guide** - How to discuss Redis in interviews
+- **Common Scenarios** - 6 typical interview questions with solutions
+  - Caching layers (Twitter, E-commerce)
+  - Distributed locks (Ticketmaster, Uber)
+  - Leaderboards (Gaming, Trending)
+  - Rate limiting (API Gateway)
+  - Proximity search (Location-based services)
+  - Work queues (Order processing)
+- **Hot Key Problem** - Critical topic for senior interviews
+- **Trade-off Discussions** - What interviewers want to hear
+- **Cheat Sheet** - Quick reference for interview prep
+
+**📚 Resources:**
+- [docs/SYSTEM_DESIGN_INTERVIEWS.md](docs/SYSTEM_DESIGN_INTERVIEWS.md) - Complete interview guide
+- [docs/REDIS_INTERVIEW_CHEATSHEET.md](docs/REDIS_INTERVIEW_CHEATSHEET.md) - Printable cheat sheet
+- [examples/interview-scenarios/](examples/interview-scenarios/) - Working code examples
 
 ---
 
