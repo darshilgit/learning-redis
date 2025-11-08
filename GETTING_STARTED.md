@@ -4,14 +4,52 @@ Welcome! This guide will help you start learning Redis effectively using the too
 
 ---
 
+## 👥 Choose Your Learning Path
+
+### 🌱 **Beginner Path** (Recommended for First-Timers)
+**Focus:** Learn Redis fundamentals and practical usage  
+**Duration:** 20-25 hours (Weeks 1-3 only)  
+**Goal:** Confidently use Redis in your projects
+
+✅ Week 1: Fundamentals  
+✅ Week 2: Intermediate features  
+✅ Week 3: Advanced topics  
+⏭️ Week 4: SKIP (optional later)
+
+**Perfect if you're:**
+- New to Redis or in-memory databases
+- Building personal projects
+- Not currently interviewing
+
+### 💼 **Interview Path**
+**Focus:** Master Redis + prepare for system design interviews  
+**Duration:** 35-45 hours (All 4 weeks)  
+**Goal:** Production expertise + ace FAANG interviews
+
+✅ Week 1: Fundamentals  
+✅ Week 2: Intermediate features  
+✅ Week 3: Advanced topics  
+✅ Week 4: Production patterns + Interview prep
+
+**Perfect if you're:**
+- Preparing for job interviews
+- Targeting FAANG or senior roles
+- Need system design practice
+
+---
+
+**🆕 Not sure which path?** → Start with **Beginner Path** (Weeks 1-3). You can always do Week 4 later!
+
+---
+
 ## 🗺️ YOUR COMPLETE LEARNING ROADMAP
 
 **Use this as your single source of truth for progress tracking.**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     REDIS MASTERY: 4-WEEK JOURNEY                           │
-│                    Estimated Total Time: 35-45 hours                        │
+│           REDIS MASTERY: YOUR PERSONALIZED JOURNEY                          │
+│   🌱 Beginner Path: 20-25 hours  |  💼 Interview Path: 35-45 hours         │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ═══════════════════════════════════════════════════════════════════════════════
@@ -147,21 +185,20 @@ Welcome! This guide will help you start learning Redis effectively using the too
 ┌─ REDIS STREAMS (4-5 hours) ⭐ KEY FEATURE ───────────────────────────────┐
 │ □ Streams Basics                                         [1.5 hours]     │
 │   └─→ Read: docs/REDIS_STREAMS_EXPLAINED.md                             │
-│   └─→ Compare: Pub/Sub vs Streams vs Kafka                              │
+│   └─→ Compare: Pub/Sub vs Streams                                       │
 │   └─→ Understand: When to use each                                      │
 │   └─→ Try: XADD, XREAD, XLEN                                            │
 │                                                                           │
-│ □ Consumer Groups (Like Kafka!)                          [2 hours]       │
+│ □ Consumer Groups                                        [2 hours]       │
 │   └─→ Create consumer group: XGROUP CREATE                              │
 │   └─→ Read as group: XREADGROUP                                         │
 │   └─→ Acknowledge: XACK                                                 │
 │   └─→ Handle failures: XPENDING, XCLAIM                                 │
 │                                                                           │
-│ □ Streams vs Kafka Comparison                            [1 hour]        │
-│   └─→ Read: docs/STREAMS_VS_KAFKA.md                                    │
+│ □ Understanding Streams Use Cases                        [1 hour]        │
 │   └─→ When to use Redis Streams                                         │
-│   └─→ When to use Kafka                                                 │
-│   └─→ Using them together (complementary!)                              │
+│   └─→ When to use Pub/Sub instead                                       │
+│   └─→ Durability vs performance trade-offs                              │
 │                                                                           │
 │ □ Build: Event Log System                                [1 hour]        │
 │   └─→ Producer: Add events to stream                                    │
@@ -207,7 +244,7 @@ Welcome! This guide will help you start learning Redis effectively using the too
 📊 WEEK 2 SELF-CHECK:
     □ Understand Pub/Sub patterns
     □ Master Redis Streams and consumer groups
-    □ Compared Streams vs Kafka (when to use each)
+    □ Understand when to use Streams vs Pub/Sub
     □ Can write Lua scripts
     □ Use transactions and pipelining
     □ Built event-driven applications
@@ -306,7 +343,10 @@ Welcome! This guide will help you start learning Redis effectively using the too
     □ Handled failure scenarios
 
 ═══════════════════════════════════════════════════════════════════════════════
- WEEK 4: PRODUCTION PATTERNS (8-10 hours)
+ WEEK 4: PRODUCTION & INTERVIEWS (8-10 hours) ⚠️ OPTIONAL
+ 
+ 🌱 Beginner Path: STOP HERE! You've learned Redis. Week 4 is optional.
+ 💼 Interview Path: Continue below for production + interview prep.
 ═══════════════════════════════════════════════════════════════════════════════
 
 ┌─ CACHING PATTERNS (3-4 hours) ⭐ CRITICAL ───────────────────────────────┐
@@ -328,7 +368,7 @@ Welcome! This guide will help you start learning Redis effectively using the too
 │                                                                           │
 │ □ Cache Invalidation Strategies                          [1 hour]        │
 │   └─→ TTL-based                                                         │
-│   └─→ Event-based (via Kafka/Streams)                                   │
+│   └─→ Event-based (via Streams)                                         │
 │   └─→ Manual invalidation                                               │
 │   └─→ "There are only two hard things..."                               │
 │                                                                           │
@@ -368,24 +408,34 @@ Welcome! This guide will help you start learning Redis effectively using the too
 │ 🎯 Milestone: Secure Redis in production                                 │
 └───────────────────────────────────────────────────────────────────────────┘
 
-┌─ REDIS + KAFKA INTEGRATION (2-3 hours) ⭐ UNIQUE VALUE ─────────────────┐
-│ □ Pattern 1: Kafka → Redis                               [1 hour]        │
-│   └─→ Read: docs/KAFKA_REDIS_PATTERNS.md                                │
-│   └─→ Use case: Aggregate Kafka events into Redis state                 │
-│   └─→ Example: Real-time analytics dashboard                            │
-│   └─→ Implement: Kafka consumer → Redis writer                          │
+┌─ INTERVIEW PREPARATION (3-4 hours) ⭐ UNIQUE VALUE ─────────────────────┐
+│ □ System Design Interview Guide                         [1.5 hours]     │
+│   └─→ Read: docs/SYSTEM_DESIGN_INTERVIEWS.md                            │
+│   └─→ When to suggest Redis in interviews                               │
+│   └─→ 6 common interview scenarios                                      │
+│   └─→ How to discuss trade-offs                                         │
 │                                                                           │
-│ □ Pattern 2: Redis → Kafka                               [1 hour]        │
-│   └─→ Use case: Cache invalidation via Kafka                            │
-│   └─→ Example: Multi-region cache sync                                  │
-│   └─→ Implement: Redis change → Kafka event                             │
+│ □ Hot Key Problem (Critical!) ⭐                         [30 min]        │
+│   └─→ What is it and why it matters                                     │
+│   └─→ Client-side caching solution                                      │
+│   └─→ Multiple keys with randomization                                  │
+│   └─→ Read replica scaling                                              │
 │                                                                           │
-│ □ Pattern 3: Complementary Usage                         [1 hour]        │
-│   └─→ Kafka: Event log (immutable, replay)                              │
-│   └─→ Redis: Current state (mutable, fast)                              │
-│   └─→ Together: Event sourcing + CQRS                                   │
+│ □ Practice Interview Scenarios                          [1.5 hours]     │
+│   └─→ Scenario 1: Caching layer (Twitter, E-commerce)                   │
+│   └─→ Scenario 2: Distributed locks (Ticketmaster, Uber)                │
+│   └─→ Scenario 3: Leaderboards (Gaming, Trending)                       │
+│   └─→ Scenario 4: Rate limiting (API Gateway)                           │
+│   └─→ Scenario 5: Proximity search (Uber, Restaurants)                  │
+│   └─→ Scenario 6: Work queues (Order processing)                        │
 │                                                                           │
-│ 🎯 Milestone: Redis + Kafka working together                             │
+│ □ Interview Cheat Sheet Review                          [30 min]        │
+│   └─→ Read: docs/REDIS_INTERVIEW_CHEATSHEET.md                          │
+│   └─→ Common patterns and commands                                      │
+│   └─→ When to use Redis vs alternatives                                 │
+│   └─→ Trade-offs to mention                                             │
+│                                                                           │
+│ 🎯 Milestone: Ready to ace Redis interview questions!                    │
 └───────────────────────────────────────────────────────────────────────────┘
 
 ┌─ FINAL PROJECT (3-4 hours) ──────────────────────────────────────────────┐
@@ -396,7 +446,7 @@ Welcome! This guide will help you start learning Redis effectively using the too
 │   └─→ Feature: Cache warming                                            │
 │   └─→ Feature: Metrics/monitoring                                       │
 │   └─→ Feature: Graceful degradation on cache failure                    │
-│   └─→ Feature: Kafka-based invalidation                                 │
+│   └─→ Feature: Event-based invalidation                                 │
 │   └─→ Test: Failure scenarios                                           │
 │                                                                           │
 │ 🎯 Milestone: Production-ready Redis application                         │
@@ -406,27 +456,49 @@ Welcome! This guide will help you start learning Redis effectively using the too
     □ Master caching patterns (cache-aside, write-through, write-behind)
     □ Optimized connection pools and performance
     □ Secured Redis with AUTH/ACLs
-    □ Integrated Redis with Kafka
+    □ Prepared for system design interviews
+    □ Can explain hot key problem and solutions
     □ Built production-ready caching layer
-    □ Ready to use Redis in production
+    □ Ready to use Redis in production AND ace interviews
 
 ═══════════════════════════════════════════════════════════════════════════════
  🎓 GRADUATION: YOU'RE REDIS-READY!
 ═══════════════════════════════════════════════════════════════════════════════
 
+### 🌱 Beginner Path Completion (Weeks 1-3)
+
+□ Completed Weeks 1-3
+□ Built projects with Redis
+□ Documented learnings in LEARNING_LOG.md
+□ Understand core Redis concepts
+□ Can confidently use Redis in your projects
+
+🎉 CONGRATULATIONS! You've learned Redis!
+
+**Next Steps:**
+• Build your next project with Redis
+• Explore Redis in production environments
+• Share what you've learned
+• Consider Week 4 if preparing for interviews
+
+---
+
+### 💼 Interview Path Completion (All 4 Weeks)
+
 □ Completed all 4 weeks
 □ Built multiple projects
-□ Documented learnings in LEARNING_LOG.md
-□ Compared with production patterns
-□ Can confidently use Redis in production
+□ Practiced interview scenarios
+□ Understand production patterns
+□ Can confidently use Redis in production AND ace interviews
 
-🎉 CONGRATULATIONS! You've mastered Redis!
+🎉 CONGRATULATIONS! You've mastered Redis for production and interviews!
 
-Next Steps:
-• Build your next project with Redis
+**Next Steps:**
+• Apply to your target companies
+• Practice system design interviews
+• Build your portfolio project with Redis
 • Explore Redis modules (RedisJSON, RediSearch, RedisGraph)
 • Contribute to open source Redis projects
-• Share your learning journey
 • Help others learn Redis
 
 ═══════════════════════════════════════════════════════════════════════════════
@@ -441,6 +513,13 @@ Next Steps:
 5. **Document everything** - Use LEARNING_LOG.md throughout
 
 **⏱️ Time Commitment:**
+
+🌱 **Beginner Path (Weeks 1-3):**
+- **Light pace:** 5-7 hours/week = 3-5 weeks
+- **Medium pace:** 10-12 hours/week = 2-3 weeks
+- **Intensive:** 15-20 hours/week = 1-2 weeks
+
+💼 **Interview Path (All 4 Weeks):**
 - **Light pace:** 5-7 hours/week = 5-7 weeks total
 - **Medium pace:** 10-12 hours/week = 3-4 weeks total
 - **Intensive:** 15-20 hours/week = 2-3 weeks total
@@ -522,15 +601,15 @@ R: Redis evicts keys based on policy!
 Why: Eviction policies prevent crashes
 ```
 
-### Strategy 2: Compare with Kafka
+### Strategy 2: Build Mental Models
 ```
-If you took the Kafka course, constantly compare:
-- Pub/Sub vs Kafka Topics
-- Streams vs Kafka Streams
-- When to use each
-- Using them together
+For each Redis feature, build mental models:
+- What problem does it solve?
+- What are the trade-offs?
+- When would I use this in production?
+- What alternatives exist?
 
-This deepens understanding of both!
+This deepens understanding and helps in interviews!
 ```
 
 ### Strategy 3: Production Mindset
@@ -593,10 +672,10 @@ make help           # See all commands
 - Cache invalidation patterns
 - Real-world examples
 
-**KAFKA_REDIS_PATTERNS.md** - Week 4 (if you took Kafka course)
-- Integration patterns
-- When to use each
-- Complementary usage
+**SYSTEM_DESIGN_INTERVIEWS.md** - Week 4
+- Interview preparation
+- Common scenarios
+- Trade-off discussions
 
 **LEARNING_LOG.md** - Daily
 - Document experiments
@@ -641,7 +720,7 @@ make help           # See all commands
 ### Week 2 Goals
 - [ ] Understand Pub/Sub patterns
 - [ ] Master Redis Streams
-- [ ] Compare Streams with Kafka
+- [ ] Understand Streams and consumer groups
 - [ ] Write Lua scripts
 - [ ] Use pipelining and transactions
 - [ ] Built event-driven app
@@ -657,7 +736,7 @@ make help           # See all commands
 - [ ] Master caching patterns
 - [ ] Implement production patterns
 - [ ] Secure Redis properly
-- [ ] Integrate with Kafka (if applicable)
+- [ ] Prepared for Redis interview questions
 - [ ] Built production-ready app
 - [ ] Ready for production Redis work
 
