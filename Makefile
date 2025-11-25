@@ -29,10 +29,21 @@ help:
 	@echo "  make keys        - List all keys (use carefully!)"
 	@echo "  make ui          - Open Redis Commander in browser"
 	@echo ""
+	@echo "Real-World Integration:"
+	@echo "  make cache       - Run REST API with cache example"
+	@echo "  make rate-limit  - Run rate limiter example"
+	@echo "  make leaderboard - Run leaderboard example"
+	@echo ""
+	@echo "Documentation & Guides:"
+	@echo "  make anti-patterns - Open anti-patterns guide"
+	@echo "  make sizing        - Open sizing guide"
+	@echo "  make load-test     - Open load testing guide"
+	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean       - Remove unused containers/volumes"
 	@echo "  make test        - Run Go tests"
 	@echo "  make flush       - Delete ALL data in Redis"
+	@echo "  make benchmark   - Run quick performance benchmark"
 	@echo ""
 
 # Start Redis cluster
@@ -183,4 +194,50 @@ flush:
 benchmark:
 	@echo "⚡ Running Redis benchmark..."
 	@docker exec redis redis-benchmark -t set,get -n 100000 -q
+
+# Real-world integration examples
+.PHONY: cache rate-limit leaderboard
+cache:
+	@echo "🚀 Running REST API with cache example..."
+	@cd examples/interview-scenarios/01-caching && go run main.go
+
+rate-limit:
+	@echo "🚦 Running rate limiter example..."
+	@cd examples/interview-scenarios/04-rate-limiter && go run main.go
+
+leaderboard:
+	@echo "🏆 Running leaderboard example..."
+	@cd examples/interview-scenarios/03-leaderboard && go run main.go
+
+# Documentation targets
+.PHONY: anti-patterns sizing load-test
+anti-patterns:
+	@echo "📚 Opening Redis Anti-Patterns Guide..."
+	@if command -v open > /dev/null; then \
+		open docs/ANTI_PATTERNS.md; \
+	elif command -v xdg-open > /dev/null; then \
+		xdg-open docs/ANTI_PATTERNS.md; \
+	else \
+		cat docs/ANTI_PATTERNS.md; \
+	fi
+
+sizing:
+	@echo "📏 Opening Redis Sizing Guide..."
+	@if command -v open > /dev/null; then \
+		open docs/SIZING_GUIDE.md; \
+	elif command -v xdg-open > /dev/null; then \
+		xdg-open docs/SIZING_GUIDE.md; \
+	else \
+		cat docs/SIZING_GUIDE.md; \
+	fi
+
+load-test:
+	@echo "⚡ Opening Load Testing Guide..."
+	@if command -v open > /dev/null; then \
+		open experiments/load-testing/README.md; \
+	elif command -v xdg-open > /dev/null; then \
+		xdg-open experiments/load-testing/README.md; \
+	else \
+		cat experiments/load-testing/README.md; \
+	fi
 
