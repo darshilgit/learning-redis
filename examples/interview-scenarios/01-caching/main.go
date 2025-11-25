@@ -52,7 +52,7 @@ type CacheService struct {
 	redis *redis.Client
 	db    *Database
 	ttl   time.Duration
-	
+
 	// Client-side cache for hot keys
 	localCache sync.Map
 	localTTL   time.Duration
@@ -77,7 +77,7 @@ func NewCacheService(redisClient *redis.Client, db *Database) *CacheService {
 // INTERVIEW TALKING POINT: This is the standard caching pattern
 func (cs *CacheService) GetUserProfile(userID string) (*UserProfile, error) {
 	start := time.Now()
-	
+
 	// 1. Try Redis cache first
 	cached, err := cs.redis.Get(ctx, "user:"+userID).Result()
 	if err == nil {
@@ -88,18 +88,18 @@ func (cs *CacheService) GetUserProfile(userID string) (*UserProfile, error) {
 			return &profile, nil
 		}
 	}
-	
+
 	// 2. Cache miss - query database
 	fmt.Printf("❌ Cache MISS for %s - querying database...\n", userID)
 	profile, err := cs.db.GetUser(userID)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// 3. Store in cache for next time
 	data, _ := json.Marshal(profile)
 	cs.redis.Set(ctx, "user:"+userID, data, cs.ttl)
-	
+
 	fmt.Printf("💾 Cached user %s - took %v\n", userID, time.Since(start))
 	return profile, nil
 }
@@ -109,7 +109,7 @@ func (cs *CacheService) GetUserProfile(userID string) (*UserProfile, error) {
 func (cs *CacheService) GetUserProfileWithLocalCache(userID string) (*UserProfile, error) {
 	start := time.Now()
 	key := "user:" + userID
-	
+
 	// 1. Check local cache first (hot key solution)
 	if cached, ok := cs.localCache.Load(key); ok {
 		entry := cached.(LocalCacheEntry)
@@ -123,7 +123,7 @@ func (cs *CacheService) GetUserProfileWithLocalCache(userID string) (*UserProfil
 		// Expired - remove it
 		cs.localCache.Delete(key)
 	}
-	
+
 	// 2. Check Redis
 	cached, err := cs.redis.Get(ctx, key).Result()
 	if err == nil {
@@ -138,14 +138,14 @@ func (cs *CacheService) GetUserProfileWithLocalCache(userID string) (*UserProfil
 			return &profile, nil
 		}
 	}
-	
+
 	// 3. Query database
 	fmt.Printf("❌ Cache MISS for %s - querying database...\n", userID)
 	profile, err := cs.db.GetUser(userID)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// 4. Store in both caches
 	data, _ := json.Marshal(profile)
 	cs.redis.Set(ctx, key, data, cs.ttl)
@@ -153,7 +153,7 @@ func (cs *CacheService) GetUserProfileWithLocalCache(userID string) (*UserProfil
 		Data:       data,
 		Expiration: time.Now().Add(cs.localTTL),
 	})
-	
+
 	fmt.Printf("💾 Cached user %s (both levels) - took %v\n", userID, time.Since(start))
 	return profile, nil
 }
@@ -169,59 +169,59 @@ func (cs *CacheService) InvalidateUser(userID string) {
 
 func main() {
 	fmt.Println("=== Redis Caching Pattern Demo ===\n")
-	
+
 	// Connect to Redis
 	rdb := redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
 	})
-	
+
 	// Test connection
 	if err := rdb.Ping(ctx).Err(); err != nil {
 		log.Fatal("Cannot connect to Redis:", err)
 	}
-	
+
 	// Setup
 	db := NewDatabase()
 	cache := NewCacheService(rdb, db)
-	
+
 	// Demo 1: Basic Cache-Aside Pattern
 	fmt.Println("📌 DEMO 1: Basic Cache-Aside Pattern")
 	fmt.Println("=====================================\n")
-	
+
 	// First call - cache miss
 	cache.GetUserProfile("user1")
-	
+
 	// Second call - cache hit (fast!)
 	cache.GetUserProfile("user1")
-	
+
 	fmt.Println()
-	
+
 	// Demo 2: Hot Key Problem Solution
 	fmt.Println("📌 DEMO 2: Hot Key Problem (Client-Side Cache)")
 	fmt.Println("===============================================\n")
-	
+
 	// Simulate hot key (celebrity profile)
 	for i := 0; i < 5; i++ {
 		fmt.Printf("Request %d: ", i+1)
 		cache.GetUserProfileWithLocalCache("user2")
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 3: Cache Invalidation
 	fmt.Println("📌 DEMO 3: Cache Invalidation")
 	fmt.Println("==============================\n")
-	
+
 	// Get cached
 	cache.GetUserProfile("user3")
-	
+
 	// Simulate update - invalidate cache
 	fmt.Println("\n🔄 User profile updated!")
 	cache.InvalidateUser("user3")
-	
+
 	// Next request will miss cache
 	cache.GetUserProfile("user3")
-	
+
 	fmt.Println("\n" + `
 ╔════════════════════════════════════════════════════════════════╗
 ║                      INTERVIEW TALKING POINTS                  ║
@@ -259,4 +259,3 @@ func main() {
 ╚════════════════════════════════════════════════════════════════╝
 `)
 }
-

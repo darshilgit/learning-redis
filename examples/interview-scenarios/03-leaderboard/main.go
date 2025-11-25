@@ -62,7 +62,7 @@ func (lb *Leaderboard) GetTopPlayers(n int) ([]Player, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	players := make([]Player, len(results))
 	for i, z := range results {
 		players[i] = Player{
@@ -103,7 +103,7 @@ func (lb *Leaderboard) GetPlayersInRange(minScore, maxScore int) ([]Player, erro
 	if err != nil {
 		return nil, err
 	}
-	
+
 	players := make([]Player, len(results))
 	for i, z := range results {
 		players[i] = Player{
@@ -129,16 +129,16 @@ func (lb *Leaderboard) GetTotalPlayers() (int, error) {
 
 // TimeBasedLeaderboard creates daily/weekly leaderboards
 type TimeBasedLeaderboard struct {
-	redis     *redis.Client
+	redis      *redis.Client
 	namePrefix string
-	ttl       time.Duration
+	ttl        time.Duration
 }
 
 func NewTimeBasedLeaderboard(redisClient *redis.Client, namePrefix string, ttl time.Duration) *TimeBasedLeaderboard {
 	return &TimeBasedLeaderboard{
-		redis:     redisClient,
+		redis:      redisClient,
 		namePrefix: namePrefix,
-		ttl:       ttl,
+		ttl:        ttl,
 	}
 }
 
@@ -151,37 +151,37 @@ func (tbl *TimeBasedLeaderboard) GetCurrentBoard() string {
 // UpdateScore updates score in today's leaderboard
 func (tbl *TimeBasedLeaderboard) UpdateScore(playerID string, score int) error {
 	boardName := tbl.GetCurrentBoard()
-	
+
 	pipe := tbl.redis.Pipeline()
 	pipe.ZAdd(ctx, boardName, redis.Z{Score: float64(score), Member: playerID})
 	pipe.Expire(ctx, boardName, tbl.ttl) // Auto-expire old boards
 	_, err := pipe.Exec(ctx)
-	
+
 	return err
 }
 
 func main() {
 	fmt.Println("=== Redis Leaderboard Demo ===\n")
-	
+
 	// Connect to Redis
 	rdb := redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
 	})
-	
+
 	if err := rdb.Ping(ctx).Err(); err != nil {
 		log.Fatal("Cannot connect to Redis:", err)
 	}
-	
+
 	// Demo 1: Basic Leaderboard
 	fmt.Println("📌 DEMO 1: Gaming Leaderboard")
 	fmt.Println("==============================\n")
-	
+
 	leaderboard := NewLeaderboard(rdb, "game:leaderboard", 10)
-	
+
 	// Add players with initial scores
 	players := []struct {
-		ID   string
-		Name string
+		ID    string
+		Name  string
 		Score int
 	}{
 		{"player1", "Alice", 1500},
@@ -190,20 +190,20 @@ func main() {
 		{"player4", "Diana", 1650},
 		{"player5", "Eve", 1100},
 	}
-	
+
 	fmt.Println("Adding players...")
 	for _, p := range players {
 		leaderboard.UpdateScore(p.ID, p.Score)
 		fmt.Printf("  ✅ %s: %d points\n", p.Name, p.Score)
 	}
-	
+
 	// Show top 3
 	fmt.Println("\n🏆 Top 3 Players:")
 	topPlayers, _ := leaderboard.GetTopPlayers(3)
 	for i, p := range topPlayers {
 		fmt.Printf("  %d. %s - %d points\n", i+1, p.ID, p.Score)
 	}
-	
+
 	// Get specific player's rank
 	fmt.Println("\n📊 Player Rankings:")
 	for _, p := range players {
@@ -211,45 +211,45 @@ func main() {
 		score, _ := leaderboard.GetPlayerScore(p.ID)
 		fmt.Printf("  %s: Rank #%d (%d points)\n", p.Name, rank, score)
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 2: Increment Score (common in games)
 	fmt.Println("📌 DEMO 2: Real-Time Score Updates")
 	fmt.Println("===================================\n")
-	
+
 	fmt.Println("Alice completes a quest (+300 points)...")
 	newScore, _ := leaderboard.IncrementScore("player1", 300)
 	fmt.Printf("  Alice's new score: %d\n", newScore)
-	
+
 	fmt.Println("\nUpdated Top 3:")
 	topPlayers, _ = leaderboard.GetTopPlayers(3)
 	for i, p := range topPlayers {
 		fmt.Printf("  %d. %s - %d points\n", i+1, p.ID, p.Score)
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 3: Find Players in Score Range
 	fmt.Println("📌 DEMO 3: Matchmaking (Similar Skill)")
 	fmt.Println("=======================================\n")
-	
+
 	fmt.Println("Finding players between 1400-1700 points for balanced match...")
 	similarPlayers, _ := leaderboard.GetPlayersInRange(1400, 1700)
 	for _, p := range similarPlayers {
 		fmt.Printf("  🎮 %s (%d points)\n", p.ID, p.Score)
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 4: Time-Based Leaderboards
 	fmt.Println("📌 DEMO 4: Daily Leaderboard")
 	fmt.Println("=============================\n")
-	
+
 	dailyBoard := NewTimeBasedLeaderboard(rdb, "daily:leaderboard", 7*24*time.Hour)
-	
+
 	fmt.Println("Today's leaderboard:", dailyBoard.GetCurrentBoard())
-	
+
 	// Simulate daily scores
 	for i := 0; i < 5; i++ {
 		playerID := fmt.Sprintf("player%d", i+1)
@@ -257,28 +257,28 @@ func main() {
 		dailyBoard.UpdateScore(playerID, score)
 		fmt.Printf("  %s earned %d points today\n", playerID, score)
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 5: Memory Management
 	fmt.Println("📌 DEMO 5: Memory Management")
 	fmt.Println("=============================\n")
-	
+
 	total, _ := leaderboard.GetTotalPlayers()
 	fmt.Printf("Total players in leaderboard: %d\n", total)
-	
+
 	fmt.Println("Keeping only top 3 players...")
 	leaderboard.TrimToTopN(3)
-	
+
 	total, _ = leaderboard.GetTotalPlayers()
 	fmt.Printf("After trimming: %d players\n", total)
-	
+
 	fmt.Println("\nRemaining players:")
 	remaining, _ := leaderboard.GetTopPlayers(10)
 	for i, p := range remaining {
 		fmt.Printf("  %d. %s - %d points\n", i+1, p.ID, p.Score)
 	}
-	
+
 	fmt.Println("\n" + `
 ╔════════════════════════════════════════════════════════════════╗
 ║                      INTERVIEW TALKING POINTS                  ║
@@ -340,4 +340,3 @@ func main() {
    → No need for distributed transactions
 `)
 }
-

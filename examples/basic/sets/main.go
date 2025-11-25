@@ -35,4 +35,3 @@ func main() {
 
 	fmt.Println("\nSee strings/lists/hashes examples for complete implementations")
 }
-
