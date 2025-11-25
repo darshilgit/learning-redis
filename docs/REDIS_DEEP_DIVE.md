@@ -1,5 +1,15 @@
 # Redis Deep Dive - Technical Architecture & Internals
 
+🧭 **Navigation:** [Course Home](../README.md) → [Getting Started](../GETTING_STARTED.md) → **Deep Dive** (You are here)
+
+📍 **When to read this:** Week 1 Day 4-5, or when you want to understand Redis architecture deeply
+
+⏱️ **Time needed:** 1-2 hours
+
+🎯 **What you'll learn:** Redis internals, memory management, persistence, replication, clustering
+
+---
+
 **A comprehensive technical guide to understanding Redis from the inside out.**
 
 ---

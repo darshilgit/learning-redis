@@ -1,9 +1,24 @@
 # 🚀 Redis Learning with Go
 
+[![CI](https://github.com/darshilgit/learning-redis/actions/workflows/ci.yml/badge.svg)](https://github.com/darshilgit/learning-redis/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Go Version](https://img.shields.io/badge/Go-1.23.5-blue.svg)](https://golang.org/dl/)
 
 A hands-on learning project to master Redis using Go and Docker.
+
+---
+
+## 🧭 **LOST IN THE DOCS?**
+
+**Feeling overwhelmed by 10+ markdown files?** We have navigation guides to help:
+
+- 📄 **[Quick Start Map](../QUICK_START_MAP.md)** — One-page visual guide (print this!)
+- 🗺️ **[Complete Navigation Guide](../NAVIGATION_GUIDE.md)** — Detailed paths based on your goals
+
+**Choose your path:**
+- 🚀 **Quick Start** (2 hours) — Just get it working
+- 🎓 **Full Learning** (40-50 hours) — Master Redis deeply  
+- 💼 **Interview Prep** (10-15 hours) — Ready for job interviews
 
 ---
 
@@ -598,14 +613,137 @@ learning-redis/
 
 ---
 
+## 🏗️ Real-World Integration Examples
+
+Ready to see how Redis fits into real applications? We've got production-quality examples!
+
+### 📡 Cache-Aside Pattern
+
+**Location:** `examples/interview-scenarios/01-caching/`
+
+Complete REST API with Redis caching:
+- ✅ Cache-aside pattern (check cache → miss → query DB → cache result)
+- ✅ Graceful degradation (works when Redis is down)
+- ✅ Proper connection pooling
+- ✅ Cache hit/miss metrics
+- ✅ TTL management
+
+**Run it:**
+```bash
+cd examples/interview-scenarios/01-caching
+go run main.go
+```
+
+### 🚦 Rate Limiting
+
+**Location:** `examples/interview-scenarios/04-rate-limiter/`
+
+Production-ready API rate limiting:
+- ✅ Token bucket and sliding window algorithms
+- ✅ Per-user and per-IP rate limits
+- ✅ Lua scripts for atomic operations
+- ✅ Proper HTTP 429 responses with Retry-After
+- ✅ Metrics on rate limit hits
+
+**Run it:**
+```bash
+cd examples/interview-scenarios/04-rate-limiter
+go run main.go
+```
+
+### 🏆 More Examples
+
+See `examples/real-world-integration/` and `examples/interview-scenarios/` for:
+- Leaderboards (sorted sets)
+- Distributed locks
+- Session management
+- Work queues
+- Proximity search
+
+---
+
+## ⚠️ Common Anti-Patterns to Avoid
+
+Learn from real-world mistakes! See **[docs/ANTI_PATTERNS.md](docs/ANTI_PATTERNS.md)** for:
+
+1. **Using Redis as primary database** - Data loss risk
+2. **Not setting TTLs** - Memory leak!
+3. **Cache stampede** - Database overload when cache expires
+4. **Using KEYS in production** - Blocks Redis for seconds
+5. **Not handling cache misses** - DB penetration attacks
+6. **Over-caching** - Wasting memory
+7. **Not monitoring memory** - Surprise OOM kills
+8. **Wrong eviction policy** - Data loss or errors
+9. **No connection pooling** - Slow and wasteful
+10. **Storing large objects** - Memory waste
+
+Each anti-pattern includes:
+- 📋 Problem description
+- ⚠️ Why it's bad
+- 💥 Real-world consequences
+- ✅ Better alternatives
+
+---
+
+## 📊 Load Testing & Performance
+
+Want to understand Redis's performance characteristics? See **[experiments/load-testing/](experiments/load-testing/)**
+
+Learn how to:
+- 🎯 Measure throughput (ops/second)
+- ⏱️ Measure latency (p50, p95, p99)
+- 🔍 Test cache hit rates
+- 📈 Identify bottlenecks
+- 🚀 Optimize performance
+
+**Run benchmarks:**
+```bash
+# Basic throughput test
+docker exec redis redis-benchmark -t set,get -n 100000 -q
+
+# Latency distribution
+docker exec redis redis-benchmark -t get --latency-history
+
+# Pipeline comparison
+docker exec redis redis-benchmark -P 10 -q
+```
+
+**Expected performance (single instance):**
+- Simple operations: 70K-100K ops/sec
+- With pipelining: 300K-1M ops/sec
+- p50 latency: 0.3-1ms
+- p99 latency: 3-10ms
+
+---
+
+## 💾 Sizing Your Redis Instance
+
+How much memory do you need? See **[docs/SIZING_GUIDE.md](docs/SIZING_GUIDE.md)**
+
+Quick calculations:
+- **100K user sessions (1KB each)**: ~110MB → 256MB instance
+- **1M cached products (5KB each, 20% hot)**: ~1GB → 2GB instance
+- **10M API requests (rate limiting)**: ~50MB → 128MB instance
+
+**Cost optimization tips:**
+- Compress large values (80% savings!)
+- Use hashes for related data (90% overhead reduction)
+- Set appropriate TTLs (70% memory reduction)
+
+---
+
 ## 🎓 Next Steps
 
-1. Complete all exercises above
-2. Build a real-world application (e.g., caching layer, real-time leaderboard)
-3. Learn about Redis Cluster for horizontal scaling
-4. Explore Redis Streams for event-driven architectures
-5. Study Redis's architecture and internals
-6. Practice with production-like scenarios
+1. ✅ Complete all basic exercises above
+2. 🏗️ **Run real-world integration examples** (caching, rate limiting)
+3. ⚠️ **Read anti-patterns** to avoid common mistakes
+4. 📊 **Run load tests** to understand performance
+5. 💾 **Calculate memory needs** with sizing guide
+6. 💼 **Interview prep** (if preparing for jobs)
+7. 🔬 Build your own application using these patterns
+8. 🎯 Learn about Redis Cluster for horizontal scaling
+9. 📡 Explore Redis Streams for event-driven architectures
+10. 🏢 Study production patterns in real systems
 
 ---
 

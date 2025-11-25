@@ -1,5 +1,17 @@
 # Redis in System Design Interviews
 
+🧭 **Navigation:** [Course Home](../README.md) → [Getting Started](../GETTING_STARTED.md) → **Interview Guide** (You are here)
+
+📍 **When to read this:** Week 4, or 2 weeks before your interview
+
+⏱️ **Time needed:** 2-3 hours (then practice scenarios for 2-3 more hours)
+
+🎯 **What you'll learn:** How to discuss Redis in interviews, common scenarios, hot key problem, trade-offs
+
+💡 **Quick reference:** See [REDIS_INTERVIEW_CHEATSHEET.md](REDIS_INTERVIEW_CHEATSHEET.md) for quick review before interview
+
+---
+
 **Master Redis for FAANG/Senior Engineer Interviews**
 
 This guide teaches you **how to discuss Redis** in system design interviews, not just how to use it. You'll learn when to suggest Redis, how to reason about trade-offs, and what interviewers expect to hear.

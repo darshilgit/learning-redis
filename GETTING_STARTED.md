@@ -343,28 +343,94 @@ Welcome! This guide will help you start learning Redis effectively using the too
     □ Handled failure scenarios
 
 ═══════════════════════════════════════════════════════════════════════════════
- WEEK 4: PRODUCTION & INTERVIEWS (8-10 hours) ⚠️ OPTIONAL
+ WEEK 4: PRODUCTION & REAL-WORLD (8-10 hours) ⚠️ OPTIONAL
  
  🌱 Beginner Path: STOP HERE! You've learned Redis. Week 4 is optional.
  💼 Interview Path: Continue below for production + interview prep.
 ═══════════════════════════════════════════════════════════════════════════════
 
-┌─ CACHING PATTERNS (3-4 hours) ⭐ CRITICAL ───────────────────────────────┐
-│ □ Cache-Aside (Lazy Loading)                             [1 hour]        │
-│   └─→ Read: docs/CACHING_PATTERNS.md                                    │
-│   └─→ Pattern: App checks cache → miss → load from DB → cache it       │
-│   └─→ Implement in Go                                                   │
-│   └─→ Pros/Cons analysis                                                │
+┌─ REAL-WORLD INTEGRATION (3-4 hours) ⭐ CRITICAL ─────────────────────────┐
+│ □ REST API with Cache                                    [1.5 hours]     │
+│   └─→ Run: make cache                                                   │
+│   └─→ Location: examples/interview-scenarios/01-caching/               │
+│   └─→ Pattern: Cache-aside with graceful degradation                   │
+│   └─→ Learn: Connection pooling, metrics, health checks                │
+│   └─→ Test: API performance with/without cache                         │
 │                                                                           │
-│ □ Write-Through                                          [1 hour]        │
-│   └─→ Pattern: Write to cache + DB together                             │
-│   └─→ Implement in Go                                                   │
-│   └─→ Consistency guarantees                                            │
+│ □ Rate Limiter API                                       [1.5 hours]     │
+│   └─→ Run: make rate-limit                                             │
+│   └─→ Location: examples/interview-scenarios/04-rate-limiter/          │
+│   └─→ Pattern: Token bucket + sliding window                           │
+│   └─→ Learn: Lua scripts for atomicity                                 │
+│   └─→ Test: Hit rate limits, verify 429 responses                      │
 │                                                                           │
-│ □ Write-Behind (Write-Back)                              [1 hour]        │
-│   └─→ Pattern: Write to cache → async write to DB                       │
-│   └─→ Use Redis Streams for async writes                                │
-│   └─→ Handle failures                                                   │
+│ □ Leaderboard System                                     [1 hour]        │
+│   └─→ Run: make leaderboard                                            │
+│   └─→ Location: examples/interview-scenarios/03-leaderboard/           │
+│   └─→ Pattern: Sorted sets for rankings                                │
+│   └─→ Learn: Efficient top-N queries                                   │
+│                                                                           │
+│ 🎯 Milestone: Built production-quality integrations                      │
+└───────────────────────────────────────────────────────────────────────────┘
+
+┌─ ANTI-PATTERNS & BEST PRACTICES (2-3 hours) ⚠️ CRITICAL ────────────────┐
+│ □ Study Common Mistakes                                  [2 hours]       │
+│   └─→ Read: docs/ANTI_PATTERNS.md (or make anti-patterns)              │
+│   └─→ Learn: 10 common Redis anti-patterns                             │
+│   └─→ Understand: Real-world consequences                               │
+│   └─→ Memorize: Better alternatives                                    │
+│                                                                           │
+│ Key anti-patterns to avoid:                                              │
+│   ⚠️  Using Redis as primary database (data loss risk)                  │
+│   ⚠️  Not setting TTLs (memory leak!)                                    │
+│   ⚠️  Cache stampede (database overload)                                 │
+│   ⚠️  Using KEYS in production (blocks Redis)                            │
+│   ⚠️  Not handling cache misses (DB penetration)                         │
+│   ⚠️  Over-caching (wasting memory)                                      │
+│   ⚠️  Wrong eviction policy (errors or data loss)                        │
+│   ⚠️  No connection pooling (slow, wasteful)                             │
+│   ⚠️  Storing large objects (memory waste)                               │
+│                                                                           │
+│ □ Sizing Your Redis Instance                             [1 hour]        │
+│   └─→ Read: docs/SIZING_GUIDE.md (or make sizing)                      │
+│   └─→ Learn: Memory calculation formulas                                │
+│   └─→ Practice: Calculate memory for your use cases                    │
+│   └─→ Understand: When to scale up vs out                              │
+│                                                                           │
+│ 🎯 Milestone: Know what NOT to do in production                          │
+└───────────────────────────────────────────────────────────────────────────┘
+
+┌─ LOAD TESTING & PERFORMANCE (2-3 hours) ─────────────────────────────────┐
+│ □ Benchmark Redis                                        [1.5 hours]     │
+│   └─→ Read: experiments/load-testing/README.md (or make load-test)     │
+│   └─→ Run: make benchmark                                              │
+│   └─→ Run: redis-benchmark with different operations                   │
+│   └─→ Test: Pipeline vs normal operations                              │
+│   └─→ Test: Different data sizes                                       │
+│                                                                           │
+│ □ Measure & Interpret Results                            [1 hour]        │
+│   └─→ Understand: Throughput (ops/sec)                                 │
+│   └─→ Understand: Latency (p50, p95, p99)                              │
+│   └─→ Measure: Cache hit rates                                         │
+│   └─→ Identify: Bottlenecks                                            │
+│                                                                           │
+│ Expected performance (single instance):                                  │
+│   ✅ Simple ops: 70K-100K ops/sec                                        │
+│   ✅ With pipelining: 300K-1M ops/sec                                    │
+│   ✅ p50 latency: 0.3-1ms                                                │
+│   ✅ p99 latency: 3-10ms                                                 │
+│                                                                           │
+│ 🎯 Milestone: Understand Redis performance characteristics               │
+└───────────────────────────────────────────────────────────────────────────┘
+
+┌─ CACHING PATTERNS (OPTIONAL - Theory) ───────────────────────────────────┐
+│ □ Cache-Aside (Lazy Loading)                             [30 min]       │
+│   └─→ Pattern: Check cache → miss → load from DB → cache it            │
+│   └─→ Already demonstrated in REST API example above                   │
+│                                                                           │
+│ □ Write-Through & Write-Behind                           [30 min]       │
+│   └─→ Write-Through: Write to cache + DB together                      │
+│   └─→ Write-Behind: Write to cache → async DB write                    │
 │                                                                           │
 │ □ Cache Invalidation Strategies                          [1 hour]        │
 │   └─→ TTL-based                                                         │
@@ -453,13 +519,15 @@ Welcome! This guide will help you start learning Redis effectively using the too
 └───────────────────────────────────────────────────────────────────────────┘
 
 📊 WEEK 4 SELF-CHECK:
-    □ Master caching patterns (cache-aside, write-through, write-behind)
-    □ Optimized connection pools and performance
-    □ Secured Redis with AUTH/ACLs
+    □ Built REST API with Redis cache (production-quality)
+    □ Implemented rate limiter with Lua scripts
+    □ Studied all 10 common anti-patterns
+    □ Can calculate memory requirements for use cases
+    □ Ran load tests and understand performance numbers
+    □ Know when to scale up vs scale out
+    □ Understand connection pooling and pipelining
     □ Prepared for system design interviews
-    □ Can explain hot key problem and solutions
-    □ Built production-ready caching layer
-    □ Ready to use Redis in production AND ace interviews
+    □ Ready to use Redis in production confidently
 
 ═══════════════════════════════════════════════════════════════════════════════
  🎓 GRADUATION: YOU'RE REDIS-READY!
@@ -805,4 +873,32 @@ docker exec -it redis redis-cli PING
 Now go run `make up` and start experimenting! 🚀
 
 Happy Learning! 🎉
+
+---
+
+## 🧭 Where to Go Next
+
+### If you just finished Week 1:
+- ✅ **Understood the basics?** → Go to Week 2 (scroll up)
+- 🔬 **Want to understand internals?** → Read [mini-redis/README.md](mini-redis/README.md)
+- 📖 **Want architecture details?** → Read [docs/REDIS_DEEP_DIVE.md](docs/REDIS_DEEP_DIVE.md)
+
+### If you just finished Week 2:
+- ✅ **Ready for advanced features?** → Go to Week 3 (scroll up)
+- 🏗️ **Want to see production-quality code?** → Explore [examples/interview-scenarios/](examples/interview-scenarios/)
+- 💡 **Want to understand caching patterns?** → Read [docs/CACHING_PATTERNS.md](docs/CACHING_PATTERNS.md) (if exists)
+
+### If you just finished Week 3:
+- ✅ **Ready for production?** → Go to Week 4 (scroll up) — Or stop here if following Beginner Path! 🎉
+- ⚠️ **Want to avoid mistakes?** → Read [docs/ANTI_PATTERNS.md](docs/ANTI_PATTERNS.md)
+- 📊 **Want to calculate memory needs?** → Read [docs/SIZING_GUIDE.md](docs/SIZING_GUIDE.md)
+
+### If you completed all 4 weeks (Interview Path):
+- 🎓 **Review for interviews:** [docs/SYSTEM_DESIGN_INTERVIEWS.md](docs/SYSTEM_DESIGN_INTERVIEWS.md)
+- 📝 **Quick cheat sheet:** [docs/REDIS_INTERVIEW_CHEATSHEET.md](docs/REDIS_INTERVIEW_CHEATSHEET.md)
+- 🏆 **Practice scenarios:** [examples/interview-scenarios/](examples/interview-scenarios/)
+
+### Lost or overwhelmed?
+- 🧭 **[Complete Navigation Guide](../NAVIGATION_GUIDE.md)** — Shows all paths through the course
+- 📚 **[README.md](README.md)** — Reference guide for concepts and commands
 
