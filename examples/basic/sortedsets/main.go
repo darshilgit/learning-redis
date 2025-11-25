@@ -42,4 +42,3 @@ func main() {
 
 	fmt.Println("\nSee GETTING_STARTED.md Week 1, Day 5 for full implementation")
 }
-

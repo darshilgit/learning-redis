@@ -33,18 +33,18 @@ func (rl *FixedWindowRateLimiter) CheckRateLimit(userID string) (bool, int, erro
 	// Window is determined by current time divided by window size
 	currentWindow := time.Now().Unix() / int64(rl.windowSecs)
 	key := fmt.Sprintf("rate_limit:%s:%d", userID, currentWindow)
-	
+
 	// Increment counter atomically
 	count, err := rl.redis.Incr(ctx, key).Result()
 	if err != nil {
 		return false, 0, err
 	}
-	
+
 	// Set expiration on first request in this window
 	if count == 1 {
 		rl.redis.Expire(ctx, key, time.Duration(rl.windowSecs)*time.Second)
 	}
-	
+
 	// Check if under limit
 	allowed := count <= int64(rl.limit)
 	return allowed, int(count), nil
@@ -71,30 +71,30 @@ func (rl *SlidingWindowRateLimiter) CheckRateLimit(userID string) (bool, int, er
 	key := fmt.Sprintf("rate_limit_sliding:%s", userID)
 	now := time.Now().Unix()
 	windowStart := now - int64(rl.windowSecs)
-	
+
 	pipe := rl.redis.Pipeline()
-	
+
 	// Remove old entries outside the window
 	pipe.ZRemRangeByScore(ctx, key, "0", fmt.Sprint(windowStart))
-	
+
 	// Count entries in current window
 	countCmd := pipe.ZCard(ctx, key)
-	
+
 	// Add current request with timestamp as score
 	pipe.ZAdd(ctx, key, redis.Z{
 		Score:  float64(now),
 		Member: fmt.Sprintf("%d", now),
 	})
-	
+
 	// Set expiration
 	pipe.Expire(ctx, key, time.Duration(rl.windowSecs+1)*time.Second)
-	
+
 	// Execute pipeline
 	_, err := pipe.Exec(ctx)
 	if err != nil {
 		return false, 0, err
 	}
-	
+
 	count := countCmd.Val()
 	allowed := count < int64(rl.limit)
 	return allowed, int(count + 1), nil
@@ -103,10 +103,10 @@ func (rl *SlidingWindowRateLimiter) CheckRateLimit(userID string) (bool, int, er
 // TokenBucketRateLimiter implements token bucket algorithm
 // INTERVIEW PATTERN: Advanced - mention if asked for sophistication
 type TokenBucketRateLimiter struct {
-	redis       *redis.Client
-	capacity    int // Max tokens
-	refillRate  int // Tokens per second
-	refillTime  time.Duration
+	redis      *redis.Client
+	capacity   int // Max tokens
+	refillRate int // Tokens per second
+	refillTime time.Duration
 }
 
 func NewTokenBucketRateLimiter(redisClient *redis.Client, capacity int, refillRate int) *TokenBucketRateLimiter {
@@ -154,42 +154,42 @@ func (rl *TokenBucketRateLimiter) CheckRateLimit(userID string) (bool, int, erro
 			return {0, tokens}  -- Not allowed
 		end
 	`
-	
+
 	key := fmt.Sprintf("rate_limit_bucket:%s", userID)
 	now := time.Now().Unix()
-	
-	result, err := rl.redis.Eval(ctx, luaScript, []string{key}, 
+
+	result, err := rl.redis.Eval(ctx, luaScript, []string{key},
 		rl.capacity, rl.refillRate, now, 1).Result()
 	if err != nil {
 		return false, 0, err
 	}
-	
+
 	resultSlice := result.([]interface{})
 	allowed := resultSlice[0].(int64) == 1
 	tokens := int(resultSlice[1].(int64))
-	
+
 	return allowed, tokens, nil
 }
 
 func main() {
 	fmt.Println("=== Redis Rate Limiting Patterns ===\n")
-	
+
 	// Connect to Redis
 	rdb := redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
 	})
-	
+
 	if err := rdb.Ping(ctx).Err(); err != nil {
 		log.Fatal("Cannot connect to Redis:", err)
 	}
-	
+
 	// Demo 1: Fixed-Window Rate Limiter
 	fmt.Println("📌 DEMO 1: Fixed-Window Rate Limiter")
 	fmt.Println("=====================================")
 	fmt.Println("Limit: 5 requests per 10 seconds\n")
-	
+
 	fixedWindow := NewFixedWindowRateLimiter(rdb, 5, 10)
-	
+
 	for i := 1; i <= 7; i++ {
 		allowed, count, _ := fixedWindow.CheckRateLimit("user123")
 		status := "✅ ALLOWED"
@@ -199,16 +199,16 @@ func main() {
 		fmt.Printf("Request %d: %s (count: %d/5)\n", i, status, count)
 		time.Sleep(500 * time.Millisecond)
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 2: Sliding-Window Rate Limiter
 	fmt.Println("📌 DEMO 2: Sliding-Window Rate Limiter")
 	fmt.Println("=======================================")
 	fmt.Println("Limit: 3 requests per 5 seconds\n")
-	
+
 	slidingWindow := NewSlidingWindowRateLimiter(rdb, 3, 5)
-	
+
 	for i := 1; i <= 5; i++ {
 		allowed, count, _ := slidingWindow.CheckRateLimit("user456")
 		status := "✅ ALLOWED"
@@ -218,16 +218,16 @@ func main() {
 		fmt.Printf("Request %d: %s (count: %d/3)\n", i, status, count)
 		time.Sleep(1 * time.Second)
 	}
-	
+
 	fmt.Println()
-	
+
 	// Demo 3: Token Bucket
 	fmt.Println("📌 DEMO 3: Token Bucket Rate Limiter")
 	fmt.Println("=====================================")
 	fmt.Println("Capacity: 10 tokens, Refill: 2 tokens/sec\n")
-	
+
 	tokenBucket := NewTokenBucketRateLimiter(rdb, 10, 2)
-	
+
 	for i := 1; i <= 6; i++ {
 		allowed, tokens, _ := tokenBucket.CheckRateLimit("user789")
 		status := "✅ ALLOWED"
@@ -237,7 +237,7 @@ func main() {
 		fmt.Printf("Request %d: %s (tokens remaining: %d)\n", i, status, tokens)
 		time.Sleep(1 * time.Second)
 	}
-	
+
 	fmt.Println("\n" + `
 ╔════════════════════════════════════════════════════════════════╗
 ║                      INTERVIEW TALKING POINTS                  ║
@@ -293,4 +293,3 @@ func main() {
    → Or: Use replicas for high availability
 `)
 }
-

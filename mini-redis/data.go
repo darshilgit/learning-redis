@@ -361,4 +361,3 @@ func (r *MiniRedis) DBSize() int {
 	fmt.Printf("DBSIZE = %d\n", count)
 	return count
 }
-
