@@ -168,7 +168,7 @@ func (cs *CacheService) InvalidateUser(userID string) {
 }
 
 func main() {
-	fmt.Println("=== Redis Caching Pattern Demo ===\n")
+	fmt.Println("=== Redis Caching Pattern Demo ===")
 
 	// Connect to Redis
 	rdb := redis.NewClient(&redis.Options{
@@ -186,7 +186,7 @@ func main() {
 
 	// Demo 1: Basic Cache-Aside Pattern
 	fmt.Println("📌 DEMO 1: Basic Cache-Aside Pattern")
-	fmt.Println("=====================================\n")
+	fmt.Println("=====================================")
 
 	// First call - cache miss
 	cache.GetUserProfile("user1")
@@ -198,7 +198,7 @@ func main() {
 
 	// Demo 2: Hot Key Problem Solution
 	fmt.Println("📌 DEMO 2: Hot Key Problem (Client-Side Cache)")
-	fmt.Println("===============================================\n")
+	fmt.Println("===============================================")
 
 	// Simulate hot key (celebrity profile)
 	for i := 0; i < 5; i++ {
@@ -210,7 +210,7 @@ func main() {
 
 	// Demo 3: Cache Invalidation
 	fmt.Println("📌 DEMO 3: Cache Invalidation")
-	fmt.Println("==============================\n")
+	fmt.Println("==============================")
 
 	// Get cached
 	cache.GetUserProfile("user3")
@@ -222,7 +222,7 @@ func main() {
 	// Next request will miss cache
 	cache.GetUserProfile("user3")
 
-	fmt.Println("\n" + `
+	fmt.Print("\n" + `
 ╔════════════════════════════════════════════════════════════════╗
 ║                      INTERVIEW TALKING POINTS                  ║
 ╠════════════════════════════════════════════════════════════════╣
