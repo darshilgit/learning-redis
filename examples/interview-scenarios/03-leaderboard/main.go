@@ -161,7 +161,7 @@ func (tbl *TimeBasedLeaderboard) UpdateScore(playerID string, score int) error {
 }
 
 func main() {
-	fmt.Println("=== Redis Leaderboard Demo ===\n")
+	fmt.Println("=== Redis Leaderboard Demo ===")
 
 	// Connect to Redis
 	rdb := redis.NewClient(&redis.Options{
@@ -174,7 +174,7 @@ func main() {
 
 	// Demo 1: Basic Leaderboard
 	fmt.Println("📌 DEMO 1: Gaming Leaderboard")
-	fmt.Println("==============================\n")
+	fmt.Println("==============================")
 
 	leaderboard := NewLeaderboard(rdb, "game:leaderboard", 10)
 
@@ -216,7 +216,7 @@ func main() {
 
 	// Demo 2: Increment Score (common in games)
 	fmt.Println("📌 DEMO 2: Real-Time Score Updates")
-	fmt.Println("===================================\n")
+	fmt.Println("===================================")
 
 	fmt.Println("Alice completes a quest (+300 points)...")
 	newScore, _ := leaderboard.IncrementScore("player1", 300)
@@ -232,7 +232,7 @@ func main() {
 
 	// Demo 3: Find Players in Score Range
 	fmt.Println("📌 DEMO 3: Matchmaking (Similar Skill)")
-	fmt.Println("=======================================\n")
+	fmt.Println("=======================================")
 
 	fmt.Println("Finding players between 1400-1700 points for balanced match...")
 	similarPlayers, _ := leaderboard.GetPlayersInRange(1400, 1700)
@@ -244,7 +244,7 @@ func main() {
 
 	// Demo 4: Time-Based Leaderboards
 	fmt.Println("📌 DEMO 4: Daily Leaderboard")
-	fmt.Println("=============================\n")
+	fmt.Println("=============================")
 
 	dailyBoard := NewTimeBasedLeaderboard(rdb, "daily:leaderboard", 7*24*time.Hour)
 
@@ -262,7 +262,7 @@ func main() {
 
 	// Demo 5: Memory Management
 	fmt.Println("📌 DEMO 5: Memory Management")
-	fmt.Println("=============================\n")
+	fmt.Println("=============================")
 
 	total, _ := leaderboard.GetTotalPlayers()
 	fmt.Printf("Total players in leaderboard: %d\n", total)
@@ -279,7 +279,7 @@ func main() {
 		fmt.Printf("  %d. %s - %d points\n", i+1, p.ID, p.Score)
 	}
 
-	fmt.Println("\n" + `
+	fmt.Print("\n" + `
 ╔════════════════════════════════════════════════════════════════╗
 ║                      INTERVIEW TALKING POINTS                  ║
 ╠════════════════════════════════════════════════════════════════╣
