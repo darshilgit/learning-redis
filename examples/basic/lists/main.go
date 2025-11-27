@@ -25,7 +25,7 @@ func main() {
 	if err := client.Ping(ctx).Err(); err != nil {
 		log.Fatalf("Failed to connect to Redis: %v", err)
 	}
-	fmt.Println("✓ Connected to Redis\n")
+	fmt.Println("✓ Connected to Redis")
 
 	// ===== QUEUE PATTERN (FIFO) =====
 	fmt.Println("═══════════════════════════════════════════════════════════════")

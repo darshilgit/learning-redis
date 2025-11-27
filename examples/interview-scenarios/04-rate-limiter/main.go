@@ -172,7 +172,7 @@ func (rl *TokenBucketRateLimiter) CheckRateLimit(userID string) (bool, int, erro
 }
 
 func main() {
-	fmt.Println("=== Redis Rate Limiting Patterns ===\n")
+	fmt.Println("=== Redis Rate Limiting Patterns ===")
 
 	// Connect to Redis
 	rdb := redis.NewClient(&redis.Options{
@@ -186,7 +186,7 @@ func main() {
 	// Demo 1: Fixed-Window Rate Limiter
 	fmt.Println("📌 DEMO 1: Fixed-Window Rate Limiter")
 	fmt.Println("=====================================")
-	fmt.Println("Limit: 5 requests per 10 seconds\n")
+	fmt.Println("Limit: 5 requests per 10 seconds")
 
 	fixedWindow := NewFixedWindowRateLimiter(rdb, 5, 10)
 
@@ -205,7 +205,7 @@ func main() {
 	// Demo 2: Sliding-Window Rate Limiter
 	fmt.Println("📌 DEMO 2: Sliding-Window Rate Limiter")
 	fmt.Println("=======================================")
-	fmt.Println("Limit: 3 requests per 5 seconds\n")
+	fmt.Println("Limit: 3 requests per 5 seconds")
 
 	slidingWindow := NewSlidingWindowRateLimiter(rdb, 3, 5)
 
@@ -224,7 +224,7 @@ func main() {
 	// Demo 3: Token Bucket
 	fmt.Println("📌 DEMO 3: Token Bucket Rate Limiter")
 	fmt.Println("=====================================")
-	fmt.Println("Capacity: 10 tokens, Refill: 2 tokens/sec\n")
+	fmt.Println("Capacity: 10 tokens, Refill: 2 tokens/sec")
 
 	tokenBucket := NewTokenBucketRateLimiter(rdb, 10, 2)
 
@@ -238,7 +238,7 @@ func main() {
 		time.Sleep(1 * time.Second)
 	}
 
-	fmt.Println("\n" + `
+	fmt.Print("\n" + `
 ╔════════════════════════════════════════════════════════════════╗
 ║                      INTERVIEW TALKING POINTS                  ║
 ╠════════════════════════════════════════════════════════════════╣

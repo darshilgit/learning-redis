@@ -28,7 +28,7 @@ func main() {
 	}
 
 	fmt.Println("\n💡 In Redis, EVERYTHING is stored in a hash map (like Go's map[string]interface{})")
-	fmt.Println("   Strings are just string values in that map.\n")
+	fmt.Println("   Strings are just string values in that map.")
 
 	time.Sleep(2 * time.Second)
 
@@ -47,7 +47,7 @@ func main() {
 	}
 
 	fmt.Println("\n💡 Hashes are just map[string]string stored as the value!")
-	fmt.Println("   Perfect for storing objects/structs.\n")
+	fmt.Println("   Perfect for storing objects/structs.")
 
 	time.Sleep(2 * time.Second)
 
@@ -69,7 +69,7 @@ func main() {
 	}
 
 	fmt.Println("\n💡 Lists are just []string slices!")
-	fmt.Println("   LPUSH adds to the left, RPOP removes from the right.\n")
+	fmt.Println("   LPUSH adds to the left, RPOP removes from the right.")
 
 	time.Sleep(2 * time.Second)
 
@@ -87,7 +87,7 @@ func main() {
 	}
 
 	fmt.Println("\n💡 Sets are map[string]bool where only keys matter!")
-	fmt.Println("   Automatically handles uniqueness.\n")
+	fmt.Println("   Automatically handles uniqueness.")
 
 	time.Sleep(2 * time.Second)
 
@@ -113,7 +113,7 @@ func main() {
 	}
 
 	fmt.Println("\n💡 Redis stores expiration times in a separate map[string]time.Time")
-	fmt.Println("   Background goroutine checks and deletes expired keys.\n")
+	fmt.Println("   Background goroutine checks and deletes expired keys.")
 
 	time.Sleep(2 * time.Second)
 
@@ -141,7 +141,7 @@ func main() {
 	fmt.Println("\n✓ Leaderboard will reset in 24 hours")
 
 	fmt.Println("\n💡 Real Redis would use SORTED SETS (ZADD/ZRANGE) for leaderboards")
-	fmt.Println("   This is simplified, but shows the concept!\n")
+	fmt.Println("   This is simplified, but shows the concept!")
 
 	time.Sleep(2 * time.Second)
 
