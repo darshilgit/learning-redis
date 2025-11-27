@@ -37,3 +37,14 @@ appendonly.aof
 # Logs
 *.log
 
+
+# Go compiled binaries (by directory name matching executable)
+01-caching
+03-leaderboard
+04-rate-limiter
+strings
+lists
+sets
+hashes
+sortedsets
+mini-redis/mini-redis
