@@ -80,7 +80,8 @@ A hands-on learning project to master Redis using Go and Docker.
 **Prerequisites:**
 - ✅ Docker Desktop installed and running
 - ✅ Go 1.16+ installed
-- ✅ Basic understanding of Go programming
+
+> 💡 **Never used caching or key-value stores before?** That's okay! Start with [Day 0 in GETTING_STARTED.md](GETTING_STARTED.md#day-0-caching--key-value-basics-for-absolute-beginners-1-hour) - it teaches you the concepts in 1 hour.
 
 **Get Redis Running:**
 ```bash
@@ -90,14 +91,44 @@ cd learning-redis
 # 2. Start Redis
 docker compose up -d
 
-# 3. Run basic examples
+# 3. Wait 5 seconds, then run basic example
 go run examples/basic/strings/main.go
-
-# 4. Open Redis Commander UI
-open http://localhost:8081
 ```
 
-**See data in Redis?** ✅ You're ready to learn!
+**You should see output like:**
+```
+╔══════════════════════════════════════════════════════════════╗
+║          Redis Strings Example                                ║
+╚══════════════════════════════════════════════════════════════╝
+
+✓ Connected to Redis
+
+--- Basic String Operations ---
+SET greeting = "Hello, Redis!"
+GET greeting = "Hello, Redis!"
+```
+
+🎉 **Congratulations!** You just talked to Redis!
+
+**Next: Explore with Redis CLI (Optional but Fun!)**
+```bash
+# Connect to Redis command line
+docker exec -it redis redis-cli
+
+# Try these commands:
+SET myname "Alice"       # Store a value
+GET myname               # Get it back → "Alice"
+INCR counter             # Increment counter → 1
+INCR counter             # Increment again → 2
+KEYS *                   # List all keys
+exit                     # Quit
+```
+
+**Open Redis Commander UI:**
+```bash
+open http://localhost:8081
+```
+See your data visually! 🎨
 
 ### **Next Steps**
 

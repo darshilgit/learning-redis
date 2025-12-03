@@ -50,29 +50,208 @@ Welcome! This guide will help you start learning Redis effectively using the too
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │           REDIS MASTERY: YOUR PERSONALIZED JOURNEY                          │
 │   🌱 Beginner Path: 20-25 hours  |  💼 Interview Path: 35-45 hours         │
+│                                                                             │
+│  DAY 0 (Optional)  →  WEEK 1  →  WEEK 2  →  WEEK 3  →  WEEK 4 (Optional)  │
+│  Caching Basics       Core        Messaging   HA/Cluster  Production       │
+│  (1 hour)           (8-10 hrs)   (8-10 hrs)  (10-12 hrs) (8-10 hrs)       │
 └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📋 BEFORE YOU BEGIN
+
+**Check these boxes before starting:**
+
+- [ ] Docker Desktop installed and **running** (check the whale icon!)
+- [ ] Go 1.16+ installed (`go version` should work)
+- [ ] This repo cloned
+- [ ] Terminal open in the `learning-redis` directory
+
+**Quick test:**
+```bash
+cd learning-redis
+make up
+# Wait 5 seconds...
+docker exec -it redis redis-cli PING
+# If you see "PONG" - you're ready!
+```
+
+---
+
+═══════════════════════════════════════════════════════════════════════════════
+ DAY 0: CACHING & KEY-VALUE BASICS FOR ABSOLUTE BEGINNERS (1 hour) [OPTIONAL]
+═══════════════════════════════════════════════════════════════════════════════
+
+**Skip this if you already know what caching is and why it's useful.**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Never used caching or key-value stores? Spend 1 hour here first!          │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+┌─ PART 1: WHAT IS CACHING? (15 min) ─────────────────────────────────────────┐
+│                                                                              │
+│ Imagine you're looking up a phone number:                                   │
+│                                                                              │
+│   WITHOUT Cache:                                                            │
+│   You → Phone Book (slow) → Find number → Done                             │
+│   You → Phone Book (slow) → Find SAME number → Done (still slow!)          │
+│                                                                              │
+│   WITH Cache:                                                               │
+│   You → Phone Book (slow) → Find number → Write on sticky note → Done      │
+│   You → Sticky note (FAST!) → Done (10x faster!)                           │
+│                                                                              │
+│ That sticky note IS the cache!                                              │
+│                                                                              │
+│ In software:                                                                │
+│   - "Phone Book" = Database (PostgreSQL) - slow but complete               │
+│   - "Sticky Note" = Cache (Redis) - fast but temporary                     │
+│                                                                              │
+│ CACHE = A fast, temporary storage for frequently accessed data             │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌─ PART 2: WHAT IS A KEY-VALUE STORE? (15 min) ───────────────────────────────┐
+│                                                                              │
+│ Think of a simple dictionary:                                               │
+│                                                                              │
+│   KEY          VALUE                                                        │
+│   ─────────────────────────────────                                         │
+│   "apple"  →   "a red fruit"                                                │
+│   "car"    →   "a vehicle with 4 wheels"                                    │
+│   "user:1" →   "Alice"                                                      │
+│                                                                              │
+│ Redis is a KEY-VALUE STORE:                                                 │
+│   - You give it a KEY (any string)                                          │
+│   - It stores a VALUE (data)                                                │
+│   - You ask for the KEY → It returns the VALUE                              │
+│                                                                              │
+│ Example:                                                                    │
+│   SET "user:1:name" "Alice"     ← Store Alice under key "user:1:name"       │
+│   GET "user:1:name"             ← Returns "Alice"                           │
+│                                                                              │
+│ That's it! Redis is fundamentally this simple.                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌─ PART 3: WHY USE REDIS? (15 min) ───────────────────────────────────────────┐
+│                                                                              │
+│ Problem: Your database is slow (10-100ms per query)                         │
+│ Solution: Put hot data in Redis (0.1-1ms per query) → 100x faster!         │
+│                                                                              │
+│   ┌─────────────┐         ┌─────────────┐         ┌─────────────┐          │
+│   │   Your App  │ ──1───▶ │    Redis    │         │  PostgreSQL │          │
+│   │             │ ◀──2─── │   (cache)   │         │  (database) │          │
+│   │             │         │   0.1ms     │         │    50ms     │          │
+│   │             │ ──3───────────────────────────▶ │             │          │
+│   │             │ ◀──4───────────────────────────  │             │          │
+│   └─────────────┘         └─────────────┘         └─────────────┘          │
+│                                                                              │
+│   1. Check Redis first (is data cached?)                                    │
+│   2. If yes → return immediately (FAST!)                                    │
+│   3. If no → query PostgreSQL                                               │
+│   4. Store result in Redis for next time                                    │
+│                                                                              │
+│ Why is Redis so fast?                                                       │
+│   ✅ Data lives in RAM (memory), not disk                                   │
+│   ✅ Simple operations (GET, SET)                                           │
+│   ✅ No complex query parsing                                               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌─ PART 4: HANDS-ON - YOUR FIRST REDIS COMMANDS (15 min) ─────────────────────┐
+│                                                                              │
+│ □ Step 1: Start Redis                                                       │
+│   └─→ make up                                                               │
+│   └─→ Wait 5 seconds                                                        │
+│                                                                              │
+│ □ Step 2: Connect to Redis CLI                                              │
+│   └─→ docker exec -it redis redis-cli                                       │
+│   └─→ You should see: 127.0.0.1:6379>                                       │
+│                                                                              │
+│ □ Step 3: Try these commands (type exactly, press Enter after each):        │
+│                                                                              │
+│   PING                           → Returns "PONG" (Redis is alive!)         │
+│                                                                              │
+│   SET greeting "Hello World"     → Store "Hello World"                      │
+│   GET greeting                   → Returns "Hello World"                    │
+│                                                                              │
+│   SET counter 0                  → Store number 0                           │
+│   INCR counter                   → Returns 1 (incremented!)                 │
+│   INCR counter                   → Returns 2                                │
+│   GET counter                    → Returns "2"                              │
+│                                                                              │
+│   SET temp "delete me"           → Store something                          │
+│   EXPIRE temp 10                 → Expires in 10 seconds                    │
+│   TTL temp                       → Returns seconds remaining                │
+│   # Wait 10 seconds...                                                      │
+│   GET temp                       → Returns (nil) - it's gone!               │
+│                                                                              │
+│   KEYS *                         → List all keys you created                │
+│   exit                           → Quit Redis CLI                           │
+│                                                                              │
+│ 🎯 Milestone: You understand SET, GET, INCR, EXPIRE, TTL                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌─ KEY CONCEPTS CHEAT SHEET ──────────────────────────────────────────────────┐
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  CONCEPT     │  MEANING                                              │    │
+│  ├─────────────────────────────────────────────────────────────────────┤    │
+│  │  Cache       │  Fast temporary storage for frequently used data      │    │
+│  │  Key         │  The name/identifier for your data (like "user:1")    │    │
+│  │  Value       │  The actual data stored (like "Alice")                │    │
+│  │  SET         │  Store a value with a key                             │    │
+│  │  GET         │  Retrieve a value by its key                          │    │
+│  │  TTL         │  Time-To-Live: when the key expires                   │    │
+│  │  EXPIRE      │  Set when a key should be automatically deleted       │    │
+│  │  In-Memory   │  Data stored in RAM, not on disk (very fast!)         │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+**✅ Day 0 Complete!** You now understand why Redis exists and how it works at a basic level. Let's go to Week 1!
+
+---
 
 ═══════════════════════════════════════════════════════════════════════════════
  WEEK 1: REDIS FUNDAMENTALS (8-10 hours)
 ═══════════════════════════════════════════════════════════════════════════════
 
-┌─ DAY 1: UNDERSTAND HOW REDIS WORKS (45 min) ─────────────────────────────┐
-│ □ Step 1: Run Mini-Redis Simulator                       [15 min]        │
-│   └─→ cd mini-redis && go run .                                          │
-│   └─→ Read: mini-redis/README.md                                         │
-│                                                                           │
-│ □ Step 2: Start Real Redis                               [15 min]        │
-│   └─→ make up                                                            │
-│   └─→ docker exec -it redis redis-cli PING                              │
-│   └─→ Open Redis Commander: http://localhost:8081                       │
-│                                                                           │
-│ □ Step 3: Run Your First Commands                        [15 min]        │
-│   └─→ go run examples/basic/strings/main.go                             │
-│   └─→ Watch keys appear in Redis Commander                              │
-│   └─→ Document in LEARNING_LOG.md                                        │
-│                                                                           │
-│ 🎯 Milestone: You understand in-memory storage and basic commands        │
-└───────────────────────────────────────────────────────────────────────────┘
+┌─ DAY 1: YOUR FIRST REDIS OPERATIONS (1 hour) ───────────────────────────────┐
+│                                                                              │
+│ Today's Goal: Run Go code that talks to Redis and see it work!              │
+│                                                                              │
+│ □ Step 1: Start Redis                                    [5 min]            │
+│   └─→ make up                                                               │
+│   └─→ Wait for containers to start                                          │
+│   └─→ docker exec -it redis redis-cli PING  (should return PONG)           │
+│                                                                              │
+│ □ Step 2: Run Strings Example                            [15 min]           │
+│   └─→ go run examples/basic/strings/main.go                                │
+│   └─→ READ the output carefully - what did it do?                          │
+│   └─→ Open examples/basic/strings/main.go in your editor                   │
+│   └─→ Find: Where does it SET? GET? INCR?                                  │
+│                                                                              │
+│ □ Step 3: Verify in Redis Commander                      [10 min]           │
+│   └─→ Open: http://localhost:8081                                          │
+│   └─→ Do you see the keys that the Go code created?                        │
+│   └─→ Click on a key to see its value and TTL                              │
+│                                                                              │
+│ □ Step 4: BREAK IT ON PURPOSE!                           [20 min]           │
+│   └─→ In examples/basic/strings/main.go, try:                              │
+│       - Change a key name and run again                                     │
+│       - Try to GET a key that doesn't exist                                 │
+│       - Set a very short TTL (1 second) and watch it expire                │
+│   └─→ Understanding errors is CRUCIAL for debugging!                       │
+│                                                                              │
+│ □ Step 5: Document in LEARNING_LOG.md                    [10 min]           │
+│   └─→ What worked? What surprised you?                                     │
+│                                                                              │
+│ 🎯 Milestone: You can run Go code that reads/writes to Redis                │
+└──────────────────────────────────────────────────────────────────────────────┘
 
 ┌─ DAY 2: CORE DATA STRUCTURES (2-3 hours) ────────────────────────────────┐
 │ □ Strings - The Foundation                               [30 min]        │
@@ -123,7 +302,31 @@ Welcome! This guide will help you start learning Redis effectively using the too
 │ 🎯 Milestone: You understand memory management in Redis                  │
 └───────────────────────────────────────────────────────────────────────────┘
 
-┌─ DAY 4: PERSISTENCE DEEP DIVE (2 hours) ─────────────────────────────────┐
+┌─ DAY 4: UNDERSTAND HOW REDIS WORKS INTERNALLY (45 min) ─────────────────────┐
+│                                                                              │
+│ Now that you've USED Redis, let's understand HOW it works!                  │
+│                                                                              │
+│ □ Step 1: Run Mini-Redis Simulator                       [20 min]           │
+│   └─→ cd mini-redis && go run .                                             │
+│   └─→ Watch how data structures are stored (Go maps!)                       │
+│   └─→ See why Redis is single-threaded (no locks needed)                    │
+│   └─→ Understand how TTL/expiration works internally                        │
+│                                                                              │
+│ □ Step 2: Read Mini-Redis README                         [15 min]           │
+│   └─→ Read: mini-redis/README.md                                            │
+│   └─→ Understand: Why Redis is so fast                                      │
+│   └─→ See: How commands are processed                                       │
+│                                                                              │
+│ □ Step 3: Connect the Concepts                           [10 min]           │
+│   └─→ The SET/GET you did on Day 1 = simple map operations                  │
+│   └─→ The EXPIRE you used = background goroutine checking TTLs              │
+│   └─→ Single-threaded = no race conditions, simple, fast                    │
+│   └─→ Write in LEARNING_LOG.md: "Redis is fast because..."                  │
+│                                                                              │
+│ 🎯 Milestone: You understand WHY Redis works the way it does                │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌─ DAY 5: PERSISTENCE DEEP DIVE (2 hours) ─────────────────────────────────┐
 │ □ RDB Snapshots                                          [45 min]        │
 │   └─→ Read: docs/REDIS_DEEP_DIVE.md (Persistence)                       │
 │   └─→ Understand: Point-in-time snapshots                               │
@@ -143,7 +346,7 @@ Welcome! This guide will help you start learning Redis effectively using the too
 │ 🎯 Milestone: Can choose right persistence strategy                      │
 └───────────────────────────────────────────────────────────────────────────┘
 
-┌─ DAY 5: FIRST REAL PROJECT (2 hours) ────────────────────────────────────┐
+┌─ DAY 6: FIRST REAL PROJECT (2 hours) ────────────────────────────────────┐
 │ □ Build: Real-Time Leaderboard                          [2 hours]        │
 │   └─→ Use: Sorted Sets                                                  │
 │   └─→ Feature: Add player scores                                        │
