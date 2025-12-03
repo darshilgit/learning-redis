@@ -63,6 +63,21 @@ jobs:
         cd examples/basic/sortedsets
         go build -v .
     
+    - name: Build streams example
+      run: |
+        echo "Building streams example..."
+        go build -v ./examples/basic/streams/...
+    
+    - name: Build pubsub example
+      run: |
+        echo "Building pubsub example..."
+        go build -v ./examples/pubsub/...
+    
+    - name: Build caching example
+      run: |
+        echo "Building caching example..."
+        go build -v ./examples/caching/...
+    
     # Build interview scenarios
     - name: Build caching scenario
       run: |
@@ -121,6 +136,9 @@ jobs:
         go vet ./examples/basic/sets/...
         go vet ./examples/basic/hashes/...
         go vet ./examples/basic/sortedsets/...
+        go vet ./examples/basic/streams/...
+        go vet ./examples/pubsub/...
+        go vet ./examples/caching/...
         go vet ./examples/interview-scenarios/01-caching/...
         go vet ./examples/interview-scenarios/03-leaderboard/...
         go vet ./examples/interview-scenarios/04-rate-limiter/...
@@ -133,7 +151,8 @@ jobs:
         echo ""
         echo "Built components:"
         echo "  ✓ Main module"
-        echo "  ✓ Basic examples (strings, lists, sets, hashes, sorted sets)"
+        echo "  ✓ Basic examples (strings, lists, sets, hashes, sorted sets, streams)"
+        echo "  ✓ Pubsub and caching examples"
         echo "  ✓ Interview scenarios (caching, leaderboard, rate limiter)"
         echo "  ✓ Mini-Redis simulator"
 

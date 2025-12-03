@@ -427,4 +427,3 @@ func InteractiveMode(client *redis.Client) {
 		fmt.Printf("Published to %d subscribers\n", result)
 	}
 }
-

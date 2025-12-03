@@ -439,4 +439,3 @@ func demo5MultiLevelCaching(client *redis.Client) {
 	getData(key)
 	fmt.Println()
 }
-
