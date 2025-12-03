@@ -62,7 +62,7 @@ func main() {
 
 func runProducer(ctx context.Context, client *redis.Client, queueKey string) {
 	jobTypes := []string{"email", "image_process", "report_gen"}
-	
+
 	for i := 1; i <= 10; i++ {
 		job := Job{
 			ID:        fmt.Sprintf("job-%d", i),
@@ -83,7 +83,7 @@ func runProducer(ctx context.Context, client *redis.Client, queueKey string) {
 
 		time.Sleep(time.Duration(rand.Intn(500)+200) * time.Millisecond)
 	}
-	
+
 	// Signal end by sending "poison pills" (optional, but good for graceful shutdown)
 	// Here we just let consumers timeout after a while
 	fmt.Println("✅ Producer finished sending 10 jobs")
@@ -96,7 +96,7 @@ func runConsumer(ctx context.Context, client *redis.Client, id int, queueKey str
 		// BRPOP: Blocking pop from tail of list (timeout 5 seconds)
 		// Returns [key, value]
 		result, err := client.BRPop(ctx, 5*time.Second, queueKey).Result()
-		
+
 		if err == redis.Nil {
 			fmt.Printf("💤 Consumer %d timed out (no jobs)\n", id)
 			break
@@ -111,12 +111,11 @@ func runConsumer(ctx context.Context, client *redis.Client, id int, queueKey str
 		json.Unmarshal([]byte(jobData), &job)
 
 		fmt.Printf("   ⚙️  Consumer %d processing %s (%s)...\n", id, job.ID, job.Type)
-		
+
 		// Simulate processing time
 		processTime := time.Duration(rand.Intn(1000)+500) * time.Millisecond
 		time.Sleep(processTime)
-		
+
 		fmt.Printf("   ✅ Consumer %d finished %s\n", id, job.ID)
 	}
 }
-

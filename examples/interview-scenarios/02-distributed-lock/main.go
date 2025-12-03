@@ -79,7 +79,7 @@ func main() {
 	}
 
 	resourceID := "critical-resource"
-	
+
 	// Simulation: Multiple workers trying to access a resource
 	var wg sync.WaitGroup
 	workers := 5
@@ -99,7 +99,7 @@ func main() {
 func worker(ctx context.Context, client *redis.Client, id int, resourceID string) {
 	// Create a lock instance for this worker
 	lock := NewDistributedLock(client, "lock:"+resourceID, 2*time.Second)
-	
+
 	retries := 5
 	for i := 0; i < retries; i++ {
 		// Try to acquire lock
@@ -111,12 +111,12 @@ func worker(ctx context.Context, client *redis.Client, id int, resourceID string
 
 		if acquired {
 			fmt.Printf("🟢 Worker %d ACQUIRED lock\n", id)
-			
+
 			// Simulate work
 			workTime := time.Duration(rand.Intn(500)+500) * time.Millisecond
 			fmt.Printf("   Worker %d processing for %v...\n", id, workTime)
 			time.Sleep(workTime)
-			
+
 			// Release lock
 			err := lock.Release(ctx)
 			if err != nil {
@@ -131,7 +131,6 @@ func worker(ctx context.Context, client *redis.Client, id int, resourceID string
 			time.Sleep(time.Duration(rand.Intn(500)+200) * time.Millisecond)
 		}
 	}
-	
+
 	fmt.Printf("❌ Worker %d gave up\n", id)
 }
-
