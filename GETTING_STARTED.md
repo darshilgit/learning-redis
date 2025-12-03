@@ -49,11 +49,11 @@ Welcome! This guide will help you start learning Redis effectively using the too
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │           REDIS MASTERY: YOUR PERSONALIZED JOURNEY                          │
-│   🌱 Beginner Path: 20-25 hours  |  💼 Interview Path: 35-45 hours         │
+│   🌱 Beginner Path: 20-25 hours  |  💼 Interview Path: 35-45 hours          │
 │                                                                             │
-│  DAY 0 (Optional)  →  WEEK 1  →  WEEK 2  →  WEEK 3  →  WEEK 4 (Optional)  │
-│  Caching Basics       Core        Messaging   HA/Cluster  Production       │
-│  (1 hour)           (8-10 hrs)   (8-10 hrs)  (10-12 hrs) (8-10 hrs)       │
+│  DAY 0 (Optional) →  WEEK 1  →  WEEK 2  →  WEEK 3  →  WEEK 4 (Optional)     │
+│  Caching Basics      Core        Messaging   HA/Cluster  Production         │
+│  (1 hour)          (8-10 hrs)   (8-10 hrs)  (10-12 hrs) (8-10 hrs)          │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
