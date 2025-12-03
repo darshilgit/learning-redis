@@ -1,8 +1,6 @@
 # 🚀 Redis Learning with Go
 
-[![CI](https://github.com/darshilgit/learning-redis/actions/workflows/ci.yml/badge.svg)](https://github.com/darshilgit/learning-redis/actions)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Go Version](https://img.shields.io/badge/Go-1.23.5-blue.svg)](https://golang.org/dl/)
+[![CI](https://github.com/darshilgit/learning-redis/actions/workflows/ci.yml/badge.svg)](https://github.com/darshilgit/learning-redis/actions) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Go Version](https://img.shields.io/badge/Go-1.23.5-blue.svg)](https://golang.org/dl/)
 
 A hands-on learning project to master Redis using Go and Docker.
 
